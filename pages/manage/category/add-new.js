@@ -54,7 +54,8 @@ const CreateCategory = () => {
                 if (res.data.code === 200) {
                     common.Toast("Thêm mới thành công.", 'success');
                 } else {
-                    common.Toast("Thêm mới thất bại.", 'error');
+                    const message = res.data.message || "Thêm mới thất bại.";
+                    common.Toast(message, 'error');
                 }
             }
         } catch (error) {
