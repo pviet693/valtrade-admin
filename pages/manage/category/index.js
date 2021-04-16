@@ -13,15 +13,8 @@ Moment.locale('en');
 const Category = () => {
     const router = useRouter();
     const refLoadingBar = useRef(null);
-    const [isLoading, setIsLoading] = useState(false);
     const [categories, setCategories] = useState([]);
     const dt = useRef(null);
-
-    const renderActionFilter = () => {
-        return (
-            <input type="text" className="p-inputtext p-component p-column-filter" disabled></input>
-        );
-    }
 
     const actionBodyTemplate = (rowData) => {
         return (
@@ -41,13 +34,11 @@ const Category = () => {
             .then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        setIsLoading(true);
                         refLoadingBar.current.continuousStart();
 
                         const res = await api.adminCategory.delete(id);
 
                         refLoadingBar.current.complete();
-                        setIsLoading(false);
 
                         if (res.status === 200) {
                             if (res.data.code === 200) {
@@ -60,7 +51,6 @@ const Category = () => {
                         }
                     } catch(error) {
                         refLoadingBar.current.complete();
-                        setIsLoading(false);
                         common.Toast(error, 'error');
                     }
                 }

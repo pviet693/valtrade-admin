@@ -40,20 +40,3 @@ export const ConfirmDialog = (title, text) => {
 
     return swal.fire({})
 }
-
-export const acceptSeller = (title, text) => {
-    const swal = Swal.mixin({
-        title: title,
-        text: text,
-        customClass: {
-            confirmButton: 'btn btn-swal-confirm',
-            cancelButton: 'btn btn-swal-cancel',
-            header: 'swal-header',
-            title: 'swal-title',
-            content: 'swal-content',
-        },
-        buttonsStyling: false
-    })
-
-    return swal.fire({})
-}

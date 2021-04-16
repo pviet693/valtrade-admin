@@ -16,7 +16,7 @@
         i {
             font-size: 1em;
         }
-        
+
         div {
             margin-bottom: 2px;
         }
@@ -26,7 +26,8 @@
         color: #000;
         background: #fff;
         box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
-        font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI",
+            "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif;
         height: auto;
         width: 100%;
         padding: 20px;
@@ -49,57 +50,75 @@
             }
         }
 
-        .img_Identified{
+        .img_Identified {
             margin: 0;
-            .identified_before, .identified_after{
+
+            .identified_before,
+            .identified_after {
                 padding: 0;
-                img{
-                    width:100% !important;
+
+                img {
+                    width: 100% !important;
                 }
             }
 
-            .identified_before{
+            .identified_before {
                 margin-right: 10px;
             }
         }
     }
 
-    .seller-detail-footer{
+    .seller-detail-footer {
         color: #000;
         background: #fff;
         box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
-        font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI",
+            "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif;
         height: auto;
         padding: 20px;
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         position: sticky;
         bottom: 0;
         margin: 0 -25px 0;
-        
 
-        .btn-Accepted{
-            background: #2DDB68 !important;
+        .btn-back {
+            background-color: #fff;
+            color: #0795df;
+            width: 150px;
+            height: 40px;
+            border: 1px solid #0795df;
+
+            &:focus {
+                border: 1px solid #0795df;
+            }
+        }
+
+        .btn-accepted {
+            background: #2ddb68 !important;
             border: 1px solid whitesmoke;
-            border-radius: 10px !important;   
-            color: #fff !important;   
+            border-radius: 10px !important;
+            color: #fff !important;
             width: 150px !important;
             box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
+            height: 40px;
         }
 
-        .btn-accept{
-            background-color: #0795DF;
+        .btn-accept {
+            background-color: #0795df;
             color: #fff;
+            width: 150px !important;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
+            height: 40px;
+        }
+
+        .btn-decline {
+            background-color: #de3535;
+            color: #fff;
+            width: 150px !important;
+            height: 40px;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
             margin-right: 20px;
-            width: 150px !important;
-            box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
-        }
-
-        .btn-decline{
-            background-color: #DE3535;
-            color: #fff;
-            width: 150px !important;
-            box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
         }
     }
 }

@@ -116,19 +116,12 @@ const Seller = () => {
     useEffect(async () => {
         try {
             const res = await api.adminSeller.getList();
-            console.log(res);
             if (res.status === 200) {
                 if (res.data.code === 200) {
                     let listSellers = [];
                     res.data.result.map(x => {
                         let seller = new SellerItem();
                         seller.id = x._id || "";
-                        // seller.name = x.buyerAccount? (x.buyerAccount.name || "") : "";
-                        // seller.phone = x.buyerAccount? (x.buyerAccount.phone || "") : "";
-                        // seller.email = x.buyerAccount.local? (x.buyerAccount.local.email || "") : "";
-                        // seller.address = x.buyerAccount? (x.buyerAccount.address || "") : "";
-                        // seller.accept = x.accept;
-
                         seller.name = x.nameOwner || "";
                         seller.phone = x.phone || "";
                         seller.email = x.email || "";
@@ -142,7 +135,7 @@ const Seller = () => {
                     setSellers(listSellers);
                 } else {
                     let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
-                    common.Toast(res.data.message, 'error');
+                    common.Toast(message, 'error');
                 }
             }
         } catch(error) {

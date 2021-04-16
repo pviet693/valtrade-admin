@@ -16,37 +16,11 @@ const User = () => {
     const [dateFilter, setDateFilter] = useState(null);
     const dt = useRef(null);
 
-    const filterDate = (value, filter) => {
-        if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
-            return true;
-        }
-
-        if (value === undefined || value === null) {
-            return false;
-        }
-
-        return value === Moment(filter).format('DD/MM/yyyy');
-    }
-
-    const renderDateFilter = () => {
-        return (
-            <Calendar value={dateFilter} onChange={onDateFilterChange} dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" id="pr_id_15" />
-        );
-    }
 
     const renderActionFilter = () => {
         return (
             <input type="text" className="p-inputtext p-component p-column-filter" disabled></input>
         );
-    }
-
-    const onDateFilterChange = (event) => {
-        if (event.value !== null)
-            dt.current.filter(Moment(event.value).format('DD/MM/yyyy'), 'date', 'equals');
-        else
-            dt.current.filter(null, 'date', 'equals');
-
-        setDateFilter(event.value);
     }
 
     const actionBodyTemplate = (rowData) => {
@@ -88,7 +62,6 @@ const User = () => {
         }
     }, []);
 
-    const dateFilterElement = renderDateFilter();
     const actionFilterElement = renderActionFilter();
 
     return (
@@ -106,12 +79,12 @@ const User = () => {
                             ref={dt}
                             paginator rows={10} emptyMessage="Không có kết quả" currentPageReportTemplate="{first} đến {last} của {totalRecords}"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                            scrollable scrollHeight="100%"
                         >
                             <Column field="name" header="Họ và tên" sortable filter filterPlaceholder="Nhập tên"></Column>
                             <Column field="phone" header="Số điện thoại" sortable filter filterPlaceholder="Nhập số điện thoại"></Column>
                             <Column field="email" header="Email" sortable filter filterPlaceholder="Nhập email" ></Column>
                             <Column field="gender" header="Giới tính" sortable filter filterPlaceholder="Nhập giới tính"></Column>
-                            {/* <Column field="birthday" header="Ngày sinh" sortable filter filterMatchMode="custom" filterFunction={filterDate} filterElement={dateFilterElement}></Column> */}
                             <Column field="birthday" header="Ngày sinh" sortable filter filterPlaceholder="Nhập ngày sinh"></Column>
                             <Column field="action" header="Thao tác" body={actionBodyTemplate} headerStyle={{ width: '15em', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} filterElement={actionFilterElement} filter filterMatchMode="custom" />
                         </DataTable>

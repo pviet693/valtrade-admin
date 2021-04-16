@@ -2,8 +2,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Calendar } from 'primereact/calendar';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SellerDetailModel } from './../../../../models/seller.model';
+import LoadingBar from "react-top-loading-bar";
 import api from './../../../../utils/backend-api.utils';
 import * as common from './../../../../utils/common';
 import Moment from 'moment';
@@ -16,6 +17,13 @@ const SellerDetail = (props) => {
     const router = useRouter();
     const { id } = props;
     const [seller, setSeller] = useState(new SellerDetailModel());
+    const [isLoadingDecline, setIsLoadingDecline] = useState(false);
+    const [isLoadingAccept, setIsLoadingAccept] = useState(false);
+    const refLoadingBar = useRef(null);
+
+    const back = () => {
+        router.push('/manage/seller');
+    }
 
     useEffect(async () => {
         try {
@@ -40,19 +48,49 @@ const SellerDetail = (props) => {
     }, [])
 
     const acceptSeller = () => {
-        common.acceptSeller('Xác nhận', 'Bạn muốn phê duyệt người bán này?')
+        common.ConfirmDialog('Xác nhận', 'Bạn muốn phê duyệt người bán này?')
             .then(async (result) => {
                 if (result.isConfirmed) {
+                    setIsLoadingAccept(true);
+                    refLoadingBar.current.continuousStart();
                     try {
                         const res = await api.adminSeller.postAccept(id);
-                        console.log(res);
+                        setIsLoadingAccept(false);
+                        refLoadingBar.current.complete();
                         if (res.status === 200) {
                             if (res.data.code === 200) {
-                                common.Toast('Phê duyệt người bán thành công', 'success');
+                                common.Toast('Phê duyệt người bán thành công.', 'success');
                                 router.push(`/manage/seller/detail/${id}`);
                             }
                         }
                     } catch(error) {
+                        setIsLoadingAccept(false);
+                        refLoadingBar.current.complete();
+                        common.Toast(error, 'error');
+                    }
+                }
+            });
+    }
+
+    const rejectSeller = () => {
+        common.ConfirmDialog('Xác nhận', 'Bạn muốn từ chối người bán này?')
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    setIsLoadingDecline(true);
+                    refLoadingBar.current.continuousStart();
+                    try {
+                        const res = await api.adminSeller.postAccept(id);
+                        setIsLoadingDecline(false);
+                        refLoadingBar.current.complete();
+                        if (res.status === 200) {
+                            if (res.data.code === 200) {
+                                common.Toast('Phê duyệt người bán thành công.', 'success');
+                                router.push(`/manage/seller/detail/${id}`);
+                            }
+                        }
+                    } catch (error) {
+                        setIsLoadingDecline(false);
+                        refLoadingBar.current.complete();
                         common.Toast(error, 'error');
                     }
                 }
@@ -66,6 +104,7 @@ const SellerDetail = (props) => {
                     Chi tiết người bán
                 </title>
             </Head>
+            <LoadingBar color="#00ac96" ref={refLoadingBar} />
             <div className="seller-detail-container">
                 <div className="seller-detail-title">
                     <Link href="/manage/seller">
@@ -114,19 +153,6 @@ const SellerDetail = (props) => {
                                     <input type="text" className="form-control" id="address" placeholder="Địa chỉ" name="address" defaultValue={seller.address} />
                                 </div>
                             </div>
-                            {/* <div className="form-group row align-items-center d-flex">
-                                <label htmlFor="type_seller" className="col-md-3 col-form-label">Loại người bán</label>
-                                <div className="col-md-9 d-flex align-items-center">
-                                    <label className="fancy-radio mr-4"> 
-                                        <input name="type_seller" value="individual" type="radio" checked={seller.type_seller === 'individual'} onChange={() => {}}/>
-                                        <span><i></i>Cá nhân</span>
-									</label>
-                                    <label className="fancy-radio">
-                                        <input name="type_seller" value="enterprise" type="radio" checked={seller.type_seller === 'enterprise'} onChange={() => {}}/>
-                                        <span><i></i>Doanh nghiệp</span>
-                                    </label>
-                                </div>
-                            </div> */}
                             <div className="form-group row align-items-center d-flex">
                                 <label htmlFor="birthday" className="col-md-3 col-form-label">Ngày sinh</label>
                                 <div className="col-md-9">
@@ -150,15 +176,26 @@ const SellerDetail = (props) => {
                 </div>
 
                 <div className="seller-detail-footer">
+                    <button className="btn btn-back" onClick={back}>Trở về</button>    
                     {
                         seller.accept ? (
                             <div>
-                                <Button className="btn btn-Accepted disabled">Đã phê duyệt</Button>
+                                <Button className="btn btn-accepted disabled">Đã phê duyệt</Button>
                             </div>
                         ) : (
                             <div>
-                                <Button className="btn btn-accept" startIcon={<CheckIcon />} onClick={acceptSeller}>Phê duyệt</Button>
-                                <Button className="btn btn-decline" startIcon={<ClearIcon />}>Từ chối</Button>
+                                {
+                                    isLoadingDecline ?
+                                    <button type="button" className="btn btn-decline" disabled="disabled"><i className="fa fa-spinner fa-spin mr-2" aria-hidden></i>Xử lí...</button>
+                                    :
+                                            <Button className="btn btn-decline" startIcon={<ClearIcon />} onClick={rejectSeller}>Từ chối</Button>
+                                }
+                                {
+                                    isLoadingAccept ?
+                                    <button type="button" className="btn btn-accept" disabled="disabled"><i className="fa fa-spinner fa-spin mr-2" aria-hidden></i>Xử lí...</button>
+                                    :
+                                    <Button className="btn btn-accept" startIcon={<CheckIcon />} onClick={acceptSeller}>Phê duyệt</Button>
+                                }
                             </div>
                         )
                     }

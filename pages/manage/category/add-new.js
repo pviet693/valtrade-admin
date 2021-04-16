@@ -15,7 +15,6 @@ Moment.locale('en');
 const CreateCategory = () => {
     const router = useRouter();
     const [category, setCategory] = useState(new CategoryDetailModel());
-    // const [parents, setParents] = useState([]);
     const [showError, setShowError] = useState(false);
     const [properties, setProperties] = useState([]);
     const refLoadingBar = useRef(null);

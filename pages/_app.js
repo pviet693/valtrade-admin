@@ -16,6 +16,14 @@ import '../styles/category/category-detail.scss';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { DataProvider } from '../store/GlobalState';
+import Router from 'next/router';
+import NProgress from 'nprogress'; //nprogress module
+import 'nprogress/nprogress.css'; //styles of nprogress
+
+//Binding events. 
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 const Layout = dynamic(() => import('../components/Layout'));
 

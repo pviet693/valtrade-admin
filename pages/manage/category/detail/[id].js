@@ -104,7 +104,6 @@ const CategoryDetail = (props) => {
 
     useEffect(async () => {
         try {
-            refLoadingBar.current.continuousStart();
             const res = await api.adminCategory.getDetail(id);
             if (res.status === 200) {
                 if (res.data.code === 200) {
@@ -126,23 +125,7 @@ const CategoryDetail = (props) => {
                     setProperties(listProperties);
                 }
             }
-            // const res1 = await api.adminCategory.getListParent();
-            // if (res1.status === 200) {
-            //     if (res1.data.code === 200) {
-            //         let list = [];
-            //         const data = res1.data.result;
-            //         data.forEach(x => {
-            //             let parent = new CategoryParentModel();
-            //             parent.id = x._id || "";
-            //             parent.name = x.name || "";
-            //             list.push(parent);
-            //         })
-            //         setParents(list);
-            //     }
-            // }
-            refLoadingBar.current.complete();
         } catch (error) {
-            refLoadingBar.current.complete();
             common.Toast(error, 'error');
         }
     }, [])
@@ -177,40 +160,6 @@ const CategoryDetail = (props) => {
                             }
                         </div>
                     </div>
-                    {/* <div className="form-group row my-4">
-                        <label htmlFor="parentId" className="col-md-3 col-form-label">Danh mục cha:</label>
-                        <div className="col-md-9">
-                            <select className={classNames('form-control')} id="parentId" name="parentId" onChange={onChangeInput} placeholder="Chọn danh mục" value={category.parentId}>
-                                {
-                                    category.parentId &&
-                                    <>
-                                        {
-                                            parents.length > 0 &&
-                                            parents.map((element, idx) => {
-                                                if (element.id === category.parentId)
-                                                    return <option value={element.id} key={idx} defaultValue hidden>{element.name}</option>
-                                                else {
-                                                    return <option value={element.id} key={idx}>{element.name}</option>
-                                                }
-                                            })
-                                        }
-                                    </>
-                                }
-                                {
-                                    !category.parentId &&
-                                    <>
-                                        <option value="" defaultValue hidden>Chọn danh mục cha</option>
-                                        {
-                                            parents.length > 0 &&
-                                            parents.map((element, idx) => {
-                                                return <option value={element.id} key={idx}>{element.name}</option>
-                                            })
-                                        }
-                                    </>
-                                }
-                            </select>
-                        </div>
-                    </div> */}
                     <div className="form-group row my-4">
                         <label htmlFor="description" className="col-md-3 col-form-label">Mô tả:</label>
                         <div className="col-md-9">
