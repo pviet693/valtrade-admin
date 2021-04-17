@@ -13,6 +13,8 @@ import '../styles/seller/list-seller.scss';
 import '../styles/seller/seller-detail.scss';
 import '../styles/category/list-category.scss';
 import '../styles/category/category-detail.scss';
+// import '../styles/product/product-detail.scss';
+import '../styles/product/list-product.scss';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { DataProvider } from '../store/GlobalState';

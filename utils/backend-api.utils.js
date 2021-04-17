@@ -86,6 +86,17 @@ const api = {
         delete: (id) => {
             return axios.delete(url.adminSeller.deleteSeller().concat(id), config);
         }
+    },
+    adminProduct: {
+        getList: () => {
+            return axios.get(url.adminProduct.getList());
+        }, 
+        delete: (id) => {
+            return axios.delete(url.adminProduct.deleteProduct().concat(id));
+        },
+        getDetail: (id) => {
+            return axios.get(url.adminProduct.getDetail().concat(id));
+        }
     }
 };
 
