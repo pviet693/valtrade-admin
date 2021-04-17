@@ -28,6 +28,11 @@ const url = {
         getDetail: () => `${baseUrl}/api/seller/get/`,
         postAccept: () => `${baseUrl}/api/seller/accept`,
         deleteSeller: () => `${baseUrl}/api/seller/delete/`,
+    },
+    adminProduct: {
+        getList: () => `${baseUrl}/api/product/get`,
+        deleteProduct: () => `${baseUrl}/api/product/delete/`,
+        getDetail: () => `${baseUrl}/api/product/detail/`
     }
 }
 
