@@ -25,6 +25,12 @@ const Category = () => {
         );
     }
 
+    const renderActionFilter = () => {
+        return (
+            <input type="text" className="p-inputtext p-component p-column-filter" disabled></input>
+        );
+    }
+
     const viewDetail = (id) => {
         router.push(`/manage/category/detail/${id}`);
     }
