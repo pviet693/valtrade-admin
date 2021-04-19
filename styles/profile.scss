@@ -3,7 +3,7 @@
     height: 100%;
     padding: 28px 25px;
 
-    .profile-admin-title {
+    .profile-title {
         font-size: 1.4rem;
         color: #566374;
         font-weight: 500;
@@ -14,39 +14,148 @@
         justify-content: flex-start;
     }
 
-    .profile-admin-content{
-        color: #000;
+    .profile-content {
         background: #fff;
         box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
         font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif;
-        height: 500px;
+        height: auto;
+        width: 100%;
+        
+        hr {
+            margin: unset;
+        }
+        
+        .profile-content-row {
+            padding: 20px;
+
+            .img-box {
+                margin-top: 15px;
+                width: 100px;
+                height: 100px;
+                position: relative;
+                border-radius: 50%;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                input[type="file"] {
+                    display: none;
+                }
+
+                .button-box {
+                    display: none;
+                    background-color: rgba($color: #000000, $alpha: 0.3);
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    object-fit: cover;
+
+                    button {
+                        height: 30px;
+                        width: 30px;
+                        padding: unset;
+                    }
+                }
+
+                &:hover {
+                    .button-box {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+
+            .information-box {
+                width: 100%;
+                height: auto;
+                background-color: rgba($color: #000000, $alpha: 0.01);
+                border: 1px dotted rgba($color: #000000, $alpha: 0.1);
+                padding: 20px;
+            }
+
+            .btn-close {
+                color: #fff;
+                box-sizing: content-box;
+                width: 1em;
+                height: 1em;
+                background: red url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+                border: 0;
+                border-radius: .25rem;
+                opacity: .5;
+                padding: unset;
+                height: 30px;
+                width: 30px;
+                text-align: center;
+            }
+
+            .btn-edit {
+                padding: unset;
+                height: 30px;
+                width: 30px;
+                text-align: center;
+            }
+
+            .form-edit-password {
+                border: 1px solid rgba($color: #000000, $alpha: 0.1);
+                border-radius: 5px;
+                height: auto;
+                width: 100%;
+                padding: 20px;
+            }
+        }
+    }
+
+    .profile-list-admin {
+        margin-top: 10px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
+        height: auto;
         width: 100%;
         padding: 20px;
-        .profile-admin-left{
-            .profile-admin-photo{
-                .profile-admin-photo-content{
-                    display: flex;
-                    padding: 20px;
-                    img{
-                        border-radius: 50%;
-                        width: 100px;
-                        margin-right: 40px;
-                    }
 
-                    .box-imagefile{
-                        border: 1px dotted #000;
-                        flex: 1;
-                        background-color: whitesmoke;
-                        height: 20vh;
-                        padding: 20px;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        .text-add-file{
-                            font-size: 20px;
-                            color: #00AAFF;
-                        }
+        .list-admin-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .list-admin-table {
+            width: 100%;
+            height: 100%;
+
+            .btn {
+                padding: 4px 8px;
+            }
+
+            .datatable-doc-demo .p-paginator .p-paginator-current {
+                margin-left: auto;
+            }
+
+            .p-component {
+                font-size: 1.1rem;
+                width: 100%;
+                padding: 6px 8px;
+            }
+
+            .p-datatable-tbody {
+                tr {
+                    &:hover {
+                        background-color: #f9f9f9;
                     }
                 }
             }

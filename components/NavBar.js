@@ -17,8 +17,8 @@ const NavBar = () => {
     return (
         <>
             <nav className="navbar navbar-default navbar-fixed-top">
-                <div className="brand" style={{width: '14vw', padding: '0'}}>
-                    <Link href="/product"><a><img src="/static/assets/img/VALTRADE.png" alt="Logo" className="img-responsive logo" /></a></Link>
+                <div className="brand">
+                    <Link href="/product"><a><img src="/static/assets/img/logo-dark.png" alt="Logo" className="img-responsive logo" /></a></Link>
                 </div>
                 <div className="container-fluid">
                     <div className="navbar-btn">
@@ -49,7 +49,7 @@ const NavBar = () => {
                             <li className="dropdown">
                                 <a href="#" className="dropdown-toggle" data-toggle="dropdown"><img src="/static/assets/img/user.png" className="img-circle" alt="Avatar" /> <span>PhamViet693</span> <i className="icon-submenu lnr lnr-chevron-down"></i></a>
                                 <ul className="dropdown-menu">
-                                    <li><a href="/profile"><i className="lnr lnr-user"></i> <span>Tài khoản của tôi</span></a></li>
+                                    <li><Link href="/profile"><a><i className="lnr lnr-user"></i> <span>Tài khoản của tôi</span></a></Link></li>
                                     <li><a href="#"><i className="lnr lnr-envelope"></i> <span>Tin nhắn</span></a></li>
                                     <li><a href="#"><i className="lnr lnr-cog"></i> <span>Cài đặt</span></a></li>
                                     <li onClick={logout}><a href="#"><i className="lnr lnr-exit"></i> <span>Đăng xuất</span></a></li>
