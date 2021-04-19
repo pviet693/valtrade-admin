@@ -8,11 +8,11 @@ const NavBarComponent = dynamic(() => import('./NavBar'));
 function Layout({ children }) {
 
     const router = useRouter();
-
+    const link = ['/signin', '/verify', '/create-account'];
     return (
         <div>
             {
-                !['/signin', '/verify'].includes(router.pathname) &&
+                !link.includes(router.pathname) &&
                 <div id="wrapper">
                     <NavBarComponent />
                     <SlideBarComponent />
@@ -26,7 +26,7 @@ function Layout({ children }) {
                 </div>
             }
             {
-                ['/signin', '/verify'].includes(router.pathname) &&
+                link.includes(router.pathname) &&
                 <>
                     <main>{children}</main>
                 </>

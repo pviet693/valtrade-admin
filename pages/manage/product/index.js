@@ -124,7 +124,6 @@ const Product = () => {
     useEffect(async () => {
         try {
             const res = await api.adminProduct.getList();
-            console.log(res);
             if (res.status === 200){
                 if (res.data.code === 200){
                     let listProducts = [];
