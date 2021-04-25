@@ -8,7 +8,7 @@ const NavBarComponent = dynamic(() => import('./NavBar'));
 function Layout({ children }) {
 
     const router = useRouter();
-    const link = ['/signin', '/verify', '/create-account'];
+    const link = ['/signin', '/verify', '/verify-account'];
     return (
         <div>
             {

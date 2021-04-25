@@ -133,7 +133,7 @@ const Product = () => {
                         product.name = x.name || "";
                         // product.description = x.description || "";
                         product.date_post = x.date_post ? Moment(x.date_post).format("DD/MM/yyyy") : "";
-                        product.nameOwner = x.sellerInfor.nameOwner || "";
+                        // product.nameOwner = sellerInfor.nameOwner || "";
                         product.price = x.price || "";
                         product.accept = x.accept;
                         listProducts.push(product);
@@ -172,7 +172,7 @@ const Product = () => {
                             scrollable scrollHeight="100%"
                         >
                             <Column field="name" header="Tên sản phẩm" sortable filter filterPlaceholder="Nhập tên sản phẩm"></Column>
-                            <Column field="nameOwner" header="Tên người đăng" sortable filter filterPlaceholder="Nhập tên người đăng" ></Column>
+                            {/* <Column field="nameOwner" header="Tên người đăng" sortable filter filterPlaceholder="Nhập tên người đăng" ></Column> */}
                             <Column field="date_post" header="Ngày đăng" sortable filter filterPlaceholder="dd/mm/yyyy" ></Column>
                             <Column field="price" header="Giá bán" sortable filter filterElement={actionFilterElement}  ></Column>
                             <Column field="accept" header="Trạng thái" body={actionAcceptTemplate} headerStyle={{ width: '11em', textAlign: 'center'}} bodyStyle={{ textAlign: 'center', overflow: 'visible', width:'11em'}} filterElement={actionFilterElement} filter filterMatchMode="custom" />

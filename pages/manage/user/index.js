@@ -15,7 +15,7 @@ const User = () => {
     const [users, setUsers] = useState([]);
     const [dateFilter, setDateFilter] = useState(null);
     const dt = useRef(null);
-
+    
 
     const renderActionFilter = () => {
         return (
@@ -38,6 +38,7 @@ const User = () => {
     useEffect(async () => {
         try {
             const res = await api.adminUser.getList();
+            console.log(res);
             if (res.status === 200) {
                 if (res.data.code === 200) {
                     let listUsers = [];

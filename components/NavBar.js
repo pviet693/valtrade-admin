@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import Cookie from 'js-cookie';
 import { useRouter } from 'next/router';
+import api from '../utils/backend-api.utils';
+import { useEffect, useState } from 'react';
+import { AdminModel } from '../models/admin.model';
 
 const NavBar = () => {
     const router = useRouter();
+    const [profile, setProfile] = useState("");
 
     const changeSearch = (e) => {
         
@@ -13,6 +17,17 @@ const NavBar = () => {
         Cookie.remove('admin_token');
         router.push('/signin');
     }
+
+    useEffect(async () => {
+        const res = await api.admin.getProfile();
+        if (res.status === 200){
+            if (res.data.code === 200){
+                let admin = new AdminModel();
+                admin.name = res.data.information.name;
+                setProfile(admin);
+            }
+        }
+    },[]);
 
     return (
         <>
@@ -47,7 +62,7 @@ const NavBar = () => {
                                 </ul>
                             </li>
                             <li className="dropdown">
-                                <a href="#" className="dropdown-toggle" data-toggle="dropdown"><img src="/static/assets/img/user.png" className="img-circle" alt="Avatar" /> <span>PhamViet693</span> <i className="icon-submenu lnr lnr-chevron-down"></i></a>
+                                <a href="#" className="dropdown-toggle" data-toggle="dropdown"><img src="/static/assets/img/user.png" className="img-circle" alt="Avatar" /> <span>{profile.name}</span> <i className="icon-submenu lnr lnr-chevron-down"></i></a>
                                 <ul className="dropdown-menu">
                                     <li><Link href="/profile"><a><i className="lnr lnr-user"></i> <span>Tài khoản của tôi</span></a></Link></li>
                                     <li><a href="#"><i className="lnr lnr-envelope"></i> <span>Tin nhắn</span></a></li>

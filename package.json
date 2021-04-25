@@ -27,6 +27,7 @@
     "react-reactive-form": "^1.0.32",
     "react-top-loading-bar": "^2.0.1",
     "react-transition-group": "^4.4.1",
+    "reactjs-popup": "^2.0.4",
     "sass": "^1.32.8",
     "sweetalert2": "^10.16.2"
   }

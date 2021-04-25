@@ -1,263 +1,160 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Calendar } from 'primereact/calendar';
 import LoadingBar from "react-top-loading-bar";
-import { useRef } from 'react';
+import { MultiSelect } from 'primereact/multiselect';
+import { useEffect, useRef, useState } from 'react';
 import api from '../utils/backend-api.utils';
-import * as common from './../utils/common.utils';
-import * as validate from './../utils/validate.utils';
+import * as common from '../utils/common';
+import * as validate from '../utils/validate.utils';
 import classNames from 'classnames';
-import Cookie from 'js-cookie';
-import * as cryptojs from 'crypto-js';
+import {AdminModel, AdminDetailModel, ListRoles} from '../models/admin.model';
+import Moment from 'moment';
+import { Dropdown } from 'primereact/dropdown'
+Moment.locale('en');
 
 const CreateAccount = () => {
     const router = useRouter();
-    
+    const [showError, setShowError] = useState(false);
+    const [admin, setAdmin] = useState(new AdminModel());
+    const refLoadingBar = useRef(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [role, setRole] = useState([]);
+    const inputFileAvatar = useRef(null);
 
-    const onChangeInput = (e) => {
-        const { name, value } = e.target;
-        setRegister({ ...register, [name]: value });
+    const onChangeInput = (event) => {
+        const { name, value } = event.target;
+        setAdmin({ ...admin, [name]: value });
     }
 
-    const addIdentifiedFront = (e) => {
+    const onChangeRole = (e) => {
         e.preventDefault();
-        const file = e.target.files[0];
-        if (!file) return;
-        let tempImages = images;
-        tempImages.identifiedFront = file;
-        setImages(tempImages);
-        
-        let tempUrl = urlImages;
-        tempUrl.identifiedFront = URL.createObjectURL(file);
-        setUrlImages({ ...tempUrl });
-        URL.revokeObjectURL(file);
+        setRole(e.target.value);
     }
 
-    const addIdentifiedRear = (e) => {
-        e.preventDefault();
-        const file = e.target.files[0];
-        if (!file) return;
-        let tempImages = images;
-        tempImages.identifiedRear = file;
-        setImages(tempImages);
-
-        let tempUrl = urlImages;
-        tempUrl.identifiedRear = URL.createObjectURL(file);
-        setUrlImages({...tempUrl});
-        URL.revokeObjectURL(file);
-    }
-
-    const handleRegister = async (e) => {
+    const createAdmin = async (e) => {
         e.preventDefault();
         setShowError(true);
 
-        if (validate.checkEmptyInput(register.name)
-            || validate.checkEmptyInput(register.phone)
-            || validate.checkEmptyInput(register.nameShop)
-            || validate.checkEmptyInput(register.password)
-            || validate.checkEmptyInput(register.birthday)
-            || validate.checkEmptyInput(register.address)
-            || validate.checkEmptyInput(register.email)
-            || validate.checkEmptyInput(urlImages.identifiedFront)
-            || validate.checkEmptyInput(urlImages.identifiedRear)
-            || !validate.validateEmail(register.email)
-            || !validate.validatePassword(register.password)
-            || !validate.validatePhone(register.phone)
-        ) {
-            return;
-        }
+        // if (validate.checkEmptyInput(admin.name)
+        //     || validate.checkEmptyInput(admin.email)
+        //     || validate.checkEmptyInput(admin.password)
+        //     || validate.checkEmptyInput(roles)
+        // ) {
+        //     return;
+        // }
 
-        setLoading(true);
         refLoadingBar.current.continuousStart();
-        try {
-            let formData = new FormData();
-            formData.append("image", images.identifiedFront);
-            formData.append("image", images.identifiedRear);
-            formData.append("nameOwner", register.name);
-            formData.append("phone", register.phone);
-            formData.append("birthday", register.birthday);
-            formData.append("nameShop", register.nameShop);
-            formData.append("password", register.password);
-            formData.append("email", register.email);
-            formData.append("address", register.address);
+        setIsLoading(true);
 
-            const res = await api.seller.postRegister(formData);
-            setLoading(false);
+        admin.role = role.key;
+        try {         
+            const res = await api.admin.postCreate(admin);
+            setIsLoading(false);
             refLoadingBar.current.complete();
             if (res.status === 200) {
                 if (res.data.code === 200) {
-                    common.Toast("Đăng kí thành công.", 'success')
-                        .then(() => {
-                            Cookie.set('email_register', cryptojs.AES.encrypt(register.email, common.KeyEncrypt).toString(), {path: '/',expires: 30});
-                            router.push(`/register-done`);
-                        });
+                    common.Notification("Thông báo", 'Tạo mới admin thành công. Vui lòng kiểm tra email để xác thực');
+                    router.push('/profile');
                 } else {
-                    const message = res.data.message || "Đăng kí thất bại.";
+                    const message = res.data.message || "Tạo mới admin thất bại.";
                     common.Toast(message, 'error');
                 }
             }
-        } catch(error) {
-            setLoading(false);
+        } catch (error) {
             refLoadingBar.current.complete();
+            setIsLoading(false);
             common.Toast(error, 'error');
         }
     }
 
-    const renderPhotosFront = () => {
-        return  (
-            <>
-                <img src={urlImages.identifiedFront} alt="Identified Front" />
-                <i className="fa fa-trash" aria-hidden onClick={() => deleteIdentifiedFront()}></i>
-            </>
-        )
-    };
-
-    const renderPhotosRear = () => {
-        return (
-            <>
-                <img src={urlImages.identifiedRear} alt="Identified Rear" />
-                <i className="fa fa-trash" aria-hidden onClick={() => deleteIdentifiedRear()}></i>
-            </>
-        )
-    };
-
-    const deleteIdentifiedFront = () => {
-        let tempImages = images;
-        tempImages.identifiedFront = null;
-        setImages({ ...tempImages });
-
-        let tempUrl = urlImages;
-        tempUrl.identifiedFront = "";
-        setUrlImages({ ...tempUrl });
+    const updateAvatar = (e) => {
+        e.preventDefault();
+        const file = e.target.files[0];
     }
-
-    const deleteIdentifiedRear = () => {
-        let tempImages = images;
-        tempImages.identifiedRear = null;
-        setImages({ ...tempImages });
-
-        let tempUrl = urlImages;
-        tempUrl.identifiedRear = "";
-        setUrlImages({ ...tempUrl });
-    }
-
-    useEffect(() => {
-        if (Cookie.get("email_register")) {
-            router.push('/register-done');
-        } else {
-            if (typeof window !== 'undefined') {
-                setLink(`${window.location.protocol}//${window.location.host}`);
-            }
-        }
-    }, []);
-
 
     return (
         <>
             <Head>
-                <title>Tạo tài khoản admin</title>
+                <title>
+                    Tạo mới admin
+                </title>
             </Head>
-            <LoadingBar color="#00ac96" ref={refLoadingBar} onLoaderFinished={() => { }} />
-            <div className="register-container">
-                <div className="register-content">
-                    <div className="header text-center">
-                        <div className="logo"><img src="/static/assets/img/VALTRADE.png" alt="Logo" /></div>
-                        <h1 className="lead">TẠO TÀI KHOẢN</h1>
-                    </div>
-                    <form className="form-auth-small" onSubmit={handleRegister}>
-                        <div className="form-group row align-items-center d-flex">
-                            <label htmlFor="name" className="col-md-3 col-form-label">Tên người bán</label>
-                            <div className="col-md-9">
-                                <input type="text" 
-                                    className={classNames("form-control", { "is-invalid": validate.checkEmptyInput(register.name) && showError })}
-                                    id="name" placeholder="Tên người bán" 
-                                    name="name" onChange={onChangeInput} 
-                                    value={register.name} />
-                                {
-                                    validate.checkEmptyInput(register.name) && showError &&
-                                    <div className="invalid-feedback">
-                                        Tên không được trống.
-                                    </div>
-                                }
-                            </div>
-                        </div>
-
-                        <div className="form-group row align-items-center d-flex">
-                            <label htmlFor="password" className="col-md-3 col-form-label">Password</label>
-                            <div className="col-md-9">
-                                <input type="password" 
-                                    className={classNames("form-control", { "is-invalid": (validate.checkEmptyInput(register.password) || !validate.validatePassword(register.password)) && showError })}
-                                    id="password" placeholder="Mật khẩu" 
-                                    name="password" onChange={onChangeInput} value={register.password} />
-                                {
-                                    validate.checkEmptyInput(register.password) && showError &&
-                                    <div className="invalid-feedback">
-                                        Mật khẩu không được trống.
-                                    </div>
-                                }
-                                {
-                                    !validate.validatePassword(register.password) && showError &&
-                                    <div className="invalid-feedback">
-                                        Mật khẩu không hợp lệ.
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <div className="form-group row align-items-center d-flex">
-                            <label htmlFor="email" className="col-md-3 col-form-label">Email</label>
-                            <div className="col-md-9">
-                                <input type="email" 
-                                    className={classNames("form-control", { "is-invalid": (validate.checkEmptyInput(register.email) || !validate.validateEmail(register.email)) && showError })}
-                                    id="email" placeholder="Email" 
-                                    name="email" onChange={onChangeInput} value={register.email} />
-                                {
-                                    validate.checkEmptyInput(register.email) && showError &&
-                                    <div className="invalid-feedback">
-                                        Email không được trống.
-                                    </div>
-                                }
-                                {
-                                    !validate.validateEmail(register.email) && showError &&
-                                    <div className="invalid-feedback">
-                                        Email không hợp lệ.
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        {
-                            !isLoading && 
-                            <button type="submit" className="btn btn-primary btn-md btn-block mt-6">ĐĂNG KÍ</button>
-                        }
-                        {
-                            isLoading &&
-                            <button type="button" className="btn btn-primary btn-md btn-block" disabled="disabled"><i className="fa fa-spinner fa-spin mr-2" aria-hidden></i>XỬ LÍ...</button>
-                        }
-
-                        <div className="policy-agreement d-flex justify-content-center mt-3">
-                            <span>
-                                Bằng cách ấn vào nút "ĐĂNG KÍ", tôi đồng ý với
-                                <Link href="/">
-                                    <a target="" rel="noopener noreferrer" className="ml-1 mr-1 text-primary">Điều Khoản Sử Dụng</a>
-                                </Link>
-                                và
-                                <Link href="/">
-                                    <a target="" rel="noopener noreferrer" className="mr-1 ml-1 text-primary">Chính Sách Bảo Mật của VALTRADE</a>
-                                </Link>
-                            </span>
-                        </div>
-
-                        <div className="bottom d-flex justify-content-center mt-4">
-                            <span className="helper-text d-flex">
-                                <p>Bạn đã có tài khoản?</p>
-                                <Link href="/signin">
-                                    <a style={{ color: '#00AAFF' }}>Đăng nhập</a>
-                                </Link>
-                            </span>
-                        </div>
-                    </form>
+            <LoadingBar color="#00ac96" ref={refLoadingBar} />
+            <div className="create-account-container">
+                <div className="create-account-title">
+                    <Link href="/profile">
+                        <a className="d-flex align-items-center">
+                            <i className="pi pi-angle-left mr-1"></i>
+                            <div>Quản lí admin</div>
+                        </a>
+                    </Link>
                 </div>
+                
+                <form onSubmit={createAdmin}>
+                        <div className="create-account-content">
+                            <div className="row">
+                                <div className="col-md-8">
+                                    
+                                    <div className="form-group row align-items-center d-flex">
+                                        <label htmlFor="name" className="col-md-3 col-form-label">Họ và tên</label>
+                                        <div className="col-md-9">
+                                            <input type="text" className="form-control" id="name" placeholder="Tên admin" name="name" value={admin.name} onChange={onChangeInput} />
+                                        </div>
+                                    </div>
+                                    <div className="form-group row align-items-center d-flex">
+                                        <label htmlFor="email" className="col-md-3 col-form-label">Email</label>
+                                        <div className="col-md-9">
+                                            <input type="email" className="form-control" id="email" placeholder="Email" name="email" value={admin.email} onChange={onChangeInput}/>
+                                        </div>
+                                    </div>
+                                    <div className="form-group row align-items-center d-flex">
+                                        <label htmlFor="password" className="col-md-3 col-form-label">Password</label>
+                                        <div className="col-md-9">
+                                            <input type="password" className="form-control" id="password" placeholder="Mật khẩu" name="password" value={admin.password} onChange={onChangeInput}/>
+                                        </div>
+                                    </div>
+                                    <div className="form-group row align-items-center d-flex">
+                                        <label htmlFor="role" className="col-md-3 col-form-label">Phân quyền</label>
+                                        <div className="col-md-9">
+                                            <Dropdown value={role} options={ListRoles} onChange={onChangeRole} optionLabel="name" filter showClear filterBy="name" placeholder="Chọn quyền admin" id="role"
+                                            className="dropdown-role" />   
+                                        </div>
+                                    </div>  
+                                    <div className="form-group row align-items-center d-flex">
+                                        <label htmlFor="phone" className="col-md-3 col-form-label">Số điện thoại</label>
+                                        <div className="col-md-9">
+                                            <input type="number" className="form-control" id="phone" placeholder="Số điện thoại" name="phone" value={admin.phone} onChange={onChangeInput} />
+                                        </div>
+                                    </div>    
+                                </div>
+                                <div className="col-md-4 d-flex align-items-start justify-content-center">
+                                    <div className="img-box">
+                                            <img src="/static/assets/img/user2.png" alt="Image avatar"/>
+                                            <input type="file" ref={inputFileAvatar} accept="image/*" onChange={updateAvatar} />
+                                            <div className="button-box">
+                                                <button type="button" className="btn btn-primary" onClick={() => inputFileAvatar.current.click()}><i className="fa fa-edit" aria-hidden></i></button>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div className="create-account-footer">
+                        <div>
+                            {
+                                isLoading &&
+                                <button type="button" className="btn button-update mr-4" disabled="disabled"><i className="fa fa-spinner fa-spin mr-2" aria-hidden></i>Xử lí...</button>
+                            }
+                            {
+                                !isLoading &&
+                                <button className="btn button-update" type="submit">Tạo mới</button>
+
+                            }
+                        </div>
+                    </div>
+                
+                </form>
             </div>
         </>
     )

@@ -97,6 +97,29 @@ const api = {
         getDetail: (id) => {
             return axios.get(url.adminProduct.getDetail().concat(id));
         }
+    },
+    admin: {
+        postCreate: (body) => {
+            return axios.post(url.admin.postCreate(), body, config);
+        },
+        postVerify: (body) => {
+            return axios.post(url.admin.postVerify(), body);
+        },
+        getProfile: () => {
+            return axios.get(url.admin.getProfile(),config );
+        },
+        getList: () => {
+            return axios.get(url.admin.getList(), config);
+        },
+        delete: (id) => {
+            return axios.delete(url.admin.deleteAdmin().concat(id),config);
+        },
+        updateInformation: (body) => {
+            return axios.put(url.admin.updateInformation(), body, config);
+        },
+        changePassword: (password) => {
+            return axios.post(url.admin.changePassword(), {password:password}, config)
+        }
     }
 };
 

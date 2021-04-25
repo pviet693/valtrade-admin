@@ -14,6 +14,8 @@ import '../styles/seller/seller-detail.scss';
 import '../styles/category/list-category.scss';
 import '../styles/category/category-detail.scss';
 // import '../styles/product/product-detail.scss';
+import '../styles/post/list-post.scss';
+import '../styles/verify-account.scss';
 import '../styles/product/list-product.scss';
 import '../styles/profile.scss';
 import '../styles/create-account.scss';
@@ -23,6 +25,7 @@ import { DataProvider } from '../store/GlobalState';
 import Router from 'next/router';
 import NProgress from 'nprogress'; //nprogress module
 import 'nprogress/nprogress.css'; //styles of nprogress
+import 'reactjs-popup/dist/index.css';
 
 //Binding events. 
 Router.events.on('routeChangeStart', () => NProgress.start());
