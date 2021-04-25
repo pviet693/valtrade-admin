@@ -16,7 +16,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import * as common from '../utils/common';
 import api from '../utils/backend-api.utils';
-import { AdminDetailModel, AdminModel, newInformationModel } from '../models/admin.model';
+import { AdminModel } from '../models/admin.model';
 import { RotateLeftSharp } from '@material-ui/icons';
 import LoadingBar from 'react-top-loading-bar';
 
@@ -35,7 +35,7 @@ const Profile = () => {
     const dt = useRef(null);
     const [lstAdmin, setLstAdmin] = useState([]);
     const [disabled, setDisabled] = useState(true);
-    const [newInfor, setNewInfor] = useState("");
+    const [newInfor, setNewInfor] = useState([]);
     const refLoadingBar = useRef(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -68,7 +68,6 @@ const Profile = () => {
         setShowError(true);
         if (updatePasswordForm.invalid) return;
         
-        
         try {         
             const res = await api.admin.changePassword(updatePasswordForm.value.new_password);
             if (res.status === 200) {
@@ -87,7 +86,6 @@ const Profile = () => {
             setIsLoading(false);
             common.Toast(error, 'error');
         }
-
     }
 
     const createNewAdmin = () => {
@@ -131,7 +129,7 @@ const Profile = () => {
             });
     }
 
-    const viewDetail = () => {
+    const viewDetail = (id) => {
         
     }
 
@@ -141,10 +139,10 @@ const Profile = () => {
             if (res.status === 200){
                 if (res.data.code === 200){
                     let admin = new AdminModel();
-                        admin.name = res.data.information.name || "";
-                        admin.role = res.data.information.role || "";
-                        admin.email = res.data.information.email || "";
-                        admin.phone = res.data.information.phone || "";
+                    admin.name = res.data.information.name || "";
+                    admin.role = res.data.information.role || "";
+                    admin.email = res.data.information.email || "";
+                    admin.phone = res.data.information.phone || "";
                     setAdmins(admin);
                     setNewInfor(admin);
                 }
@@ -158,12 +156,7 @@ const Profile = () => {
         }
     }
 
-    useEffect(async() => {
-       getProfile();
-    }, []);
-    
-
-    useEffect(async () => {
+    const getList = async () => {
         try {
             const res = await api.admin.getList();
             console.log(res);
@@ -188,7 +181,12 @@ const Profile = () => {
         } catch(error) {
             common.Toast(error, 'error');
         }
-    },[]);
+    }
+
+    useEffect(() => {
+       getProfile();
+       getList();
+    }, []);
 
     const actionFilterElement = renderActionFilter();
 

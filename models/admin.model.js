@@ -20,13 +20,6 @@ export class AdminDetailModel{
     }
 }
 
-// export class newInformationModel{
-//     constructor(AdminModel){
-//         this.name = "";
-//         this.email = "";
-//         this.phone = "";
-//     }
-// }
 
 export const ListRoles = [
    {name: 'Super admin', key: "SUPER_ADMIN" },

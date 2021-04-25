@@ -36,7 +36,6 @@ const url = {
     },
     admin: {
         postCreate: () => `${baseUrl}/api/admin/create`,
-        getQrCode: () => `${baseUrl}/api/admin/qrcode?id=:id`,
         postVerify: () => `${baseUrl}/api/admin/verify`,
         getProfile: () => `${baseUrl}/api/admin/profile`,
         getList: () => `${baseUrl}/api/admin/getListAdmin`, 

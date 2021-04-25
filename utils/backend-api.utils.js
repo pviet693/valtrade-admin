@@ -21,7 +21,7 @@ const api = {
             return axios.post(url.auth.postValidate(), bodyValidate);
         },
         create: (bodyCreateNew) => {
-            return axios.post(url.auth.postCreate(), bodyCreateNew);
+            return axios.post(url.auth.postCreate(), bodyCreateNew,config);
         },
         verify: (bodyVerify) => {
             return axios.post(url.auth.postVerify(), bodyVerify);
@@ -106,7 +106,7 @@ const api = {
             return axios.post(url.admin.postVerify(), body);
         },
         getProfile: () => {
-            return axios.get(url.admin.getProfile(),config );
+            return axios.get(url.admin.getProfile(),config);
         },
         getList: () => {
             return axios.get(url.admin.getList(), config);
