@@ -10,9 +10,6 @@ const SideBar = () => {
     const activeCollapse = (link) => { return router.pathname.indexOf(link) > -1; }
     const activeLink = (link) => { return router.pathname === link; }
 
-    useEffect(() => {
-        
-    }, []);
 
     return (
         <section>

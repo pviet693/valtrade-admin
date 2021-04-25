@@ -40,3 +40,22 @@ export const ConfirmDialog = (title, text, confirmText = '') => {
 
     return swal.fire({})
 }
+
+export const Notification = (title, text) => {
+    const swal = Swal.mixin({
+        title: title,
+        text: text,
+        showCancelButton: false,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK',
+        customClass: {
+            confirmButton: 'btn btn-swal-confirm',
+            header: 'swal-header',
+            title: 'swal-title',
+            content: 'swal-content',
+        },
+        buttonsStyling: false
+    })
+
+    return swal.fire({})
+}

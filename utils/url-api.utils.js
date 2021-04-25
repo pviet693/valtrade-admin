@@ -34,6 +34,16 @@ const url = {
         deleteProduct: () => `${baseUrl}/api/product/delete/`,
         getDetail: () => `${baseUrl}/api/product/detail/`,
         postApprove: () => `${baseUrl}/api/product/approve`,
+        getDetail: () => `${baseUrl}/api/product/detail/`
+    },
+    admin: {
+        postCreate: () => `${baseUrl}/api/admin/create`,
+        postVerify: () => `${baseUrl}/api/admin/verify`,
+        getProfile: () => `${baseUrl}/api/admin/profile`,
+        getList: () => `${baseUrl}/api/admin/getListAdmin`, 
+        deleteAdmin: () => `${baseUrl}/api/admin/remove?id=`,
+        updateInformation: () => `${baseUrl}/api/admin/updateInformation`,
+        changePassword: () => `${baseUrl}/api/admin/changePassword`
     }
 }
 

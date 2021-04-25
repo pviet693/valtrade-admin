@@ -37,7 +37,7 @@ const api = {
             return axios.post(url.auth.postValidate(), bodyValidate);
         },
         create: (bodyCreateNew) => {
-            return axios.post(url.auth.postCreate(), bodyCreateNew);
+            return axios.post(url.auth.postCreate(), bodyCreateNew,config);
         },
         verify: (bodyVerify) => {
             return axios.post(url.auth.postVerify(), bodyVerify);
@@ -123,6 +123,29 @@ const api = {
             if (isEnable()) {
                 return axios.post(url.adminProduct.postApprove(), body, config);
             }
+        }
+    },
+    admin: {
+        postCreate: (body) => {
+            return axios.post(url.admin.postCreate(), body, config);
+        },
+        postVerify: (body) => {
+            return axios.post(url.admin.postVerify(), body);
+        },
+        getProfile: () => {
+            return axios.get(url.admin.getProfile(),config);
+        },
+        getList: () => {
+            return axios.get(url.admin.getList(), config);
+        },
+        delete: (id) => {
+            return axios.delete(url.admin.deleteAdmin().concat(id),config);
+        },
+        updateInformation: (body) => {
+            return axios.put(url.admin.updateInformation(), body, config);
+        },
+        changePassword: (password) => {
+            return axios.post(url.admin.changePassword(), {password:password}, config)
         }
     }
 };

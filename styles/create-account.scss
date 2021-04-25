@@ -1,5 +1,174 @@
 .create-account-container {
-    width: 100%;
-    height: 100%;
+    padding: 28px 25px 28px;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 16%);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    color: #566374;
+    height: 80vh;
+
+    .create-account-title {
+        font-size: 1.4rem;
+        color: #566374;
+        font-weight: 500;
+        height: 80px;
+        margin: 0 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+
+        i {
+            font-size: 1em;
+        }
+
+        div {
+            margin-bottom: 2px;
+        }
+    }
+
+    .create-account-content {
+        background: #fff;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
+        font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif;
+        height: auto;
+        width: 80%;
+        padding: 40px;
+        font-size: 14px;
+        margin: 0 auto;
+        .header{
+            .logo{
+                width: 30%;
+                display: flex;
+                flex-direction:column;
+                justify-content: center;
+                margin-left: 35%;
+                img{
+                    width: 100%;
+                }
+            }
+        }
+        
+
+
+        .form-group {
+            .p-calendar {
+                height: 40px;
+                width: 100%;
+
+                .p-inputtext {
+                    font-size: 14px;
+                    padding: 6px 12px;
+                }
+
+                .p-button.p-button-icon-only {
+                    width: 40px;
+                }
+
+                
+            }
+
+            .dropdown-role{
+                    width: 100%;
+            }
+
+            .select-role{
+                width:100%;
+            }
+        }
+
+        .img-box {
+            margin-top: 15px;
+            width: 100px;
+            height: 100px;
+            position: relative;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            input[type="file"] {
+                display: none;
+            }
+
+            .button-box {
+                display: none;
+                background-color: rgba($color: #000000, $alpha: 0.3);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover;
+
+                button {
+                    height: 30px;
+                    width: 30px;
+                    padding: unset;
+                }
+            }
+
+            &:hover {
+                .button-box {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+
+    }
+    .create-account-footer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        background-color: #fff;
+        box-shadow: 0 -1px 2px 0 rgb(0 0 0 / 13%);
+        bottom: 0;
+        height: auto;
+        padding: 15px;
+        left: 260px;
+        right: 0;
+        position: fixed;
     
+        button {
+            border-radius: 4px;
+        }
+    
+        .button-back {
+            background-color: #fff;
+            color: #0795DF;
+            width: 150px;
+            height: 40px;
+            border: 1px solid #0795DF;
+
+            &:focus {
+                border: 1px solid #0795DF;
+            }
+        }
+    
+        .button-update {
+            background-color: #0795DF;
+            color: #fff;
+            width: 150px;
+            height: 40px;
+        }
+    
+        .button-delete {
+            background-color: #DE3535;
+            color: #fff;
+            width: 150px;
+            height: 40px;
+        }
+    }
 }

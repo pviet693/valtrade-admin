@@ -59,9 +59,9 @@ const SellerDetail = (props) => {
                         refLoadingBar.current.complete();
                         if (res.status === 200) {
                             if (res.data.code === 200) {
-                                common.Toast('Phê duyệt người bán thành công.', 'success');
-                                router.push(`/manage/seller/detail/${id}`);
+                                common.Toast('Phê duyệt người bán thành công.', 'success');    
                             }
+                            router.push(`/manage/seller/detail/${id}`);
                         }
                     } catch(error) {
                         setIsLoadingAccept(false);
@@ -73,28 +73,28 @@ const SellerDetail = (props) => {
     }
 
     const rejectSeller = () => {
-        common.ConfirmDialog('Xác nhận', 'Bạn muốn từ chối người bán này?')
-            .then(async (result) => {
-                if (result.isConfirmed) {
-                    setIsLoadingDecline(true);
-                    refLoadingBar.current.continuousStart();
-                    try {
-                        const res = await api.adminSeller.postAccept(id);
-                        setIsLoadingDecline(false);
-                        refLoadingBar.current.complete();
-                        if (res.status === 200) {
-                            if (res.data.code === 200) {
-                                common.Toast('Phê duyệt người bán thành công.', 'success');
-                                router.push(`/manage/seller/detail/${id}`);
-                            }
-                        }
-                    } catch (error) {
-                        setIsLoadingDecline(false);
-                        refLoadingBar.current.complete();
-                        common.Toast(error, 'error');
-                    }
-                }
-            });
+        // common.ConfirmDialog('Xác nhận', 'Bạn muốn từ chối người bán này?')
+        //     .then(async (result) => {
+        //         if (result.isConfirmed) {
+        //             setIsLoadingDecline(true);
+        //             refLoadingBar.current.continuousStart();
+        //             try {
+        //                 const res = await api.adminSeller.postAccept(id);
+        //                 setIsLoadingDecline(false);
+        //                 refLoadingBar.current.complete();
+        //                 if (res.status === 200) {
+        //                     if (res.data.code === 200) {
+        //                         common.Toast('Phê duyệt người bán thành công.', 'success');
+        //                         router.push(`/manage/seller/detail/${id}`);
+        //                     }
+        //                 }
+        //             } catch (error) {
+        //                 setIsLoadingDecline(false);
+        //                 refLoadingBar.current.complete();
+        //                 common.Toast(error, 'error');
+        //             }
+        //         }
+        //     });
     }
 
     return (

@@ -45,6 +45,7 @@ const CreateCategory = () => {
         })
 
         category.information = objectProperty;
+        console.log(category.information);
 
         try {
             const res = await api.adminCategory.createNew(category);
