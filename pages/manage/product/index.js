@@ -131,9 +131,8 @@ const Product = () => {
                         let product = new ProductModel();
                         product.id = x._id || "";
                         product.name = x.name || "";
-                        // product.description = x.description || "";
-                        product.date_post = x.date_post ? Moment(x.date_post).format("DD/MM/yyyy") : "";
-                        product.nameOwner = x.sellerInfor.nameOwner || "";
+                        product.date_post = x.timePost ? Moment(x.timePost).format("DD/MM/yyyy") : "";
+                        product.nameOwner = x.sellerInfor ? x.sellerInfor.nameOwner : "";
                         product.price = x.price || "";
                         product.accept = x.accept;
                         listProducts.push(product);

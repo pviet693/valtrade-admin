@@ -19,14 +19,14 @@ export const Toast = (message, type, timer = 1500) => {
     })
 }
 
-export const ConfirmDialog = (title, text) => {
+export const ConfirmDialog = (title, text, confirmText = '') => {
     const swal = Swal.mixin({
         title: title,
         text: text,
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Xóa',
+        confirmButtonText: confirmText || 'Xóa',
         cancelButtonText: 'Hủy',
         customClass: {
             confirmButton: 'btn btn-swal-confirm',

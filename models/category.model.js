@@ -64,3 +64,17 @@ export const ListProperties = [
     { name: "Chứng chỉ PB", key: "certificatePb" },
     { name: "Chứng chỉ Bpa", key: "certificateBpa" },
 ]
+
+export class PropertyDefault {
+    constructor() {
+        this.name = "";
+        this.description = "";
+        this.categoryId = "";
+        this.price = 0;
+        this.oldPrice = 0;
+        this.sku = "";
+        this.countProduct = 0;
+        this.note = "";
+        this.restWarrantyTime = 0;
+    }
+}

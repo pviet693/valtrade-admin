@@ -1,4 +1,4 @@
-const baseUrl = "http://3.142.74.42:5000";
+const baseUrl = "http://3.142.207.62:5000";
 
 const url = {
     auth: {
@@ -32,7 +32,8 @@ const url = {
     adminProduct: {
         getList: () => `${baseUrl}/api/product/get`,
         deleteProduct: () => `${baseUrl}/api/product/delete/`,
-        getDetail: () => `${baseUrl}/api/product/detail/`
+        getDetail: () => `${baseUrl}/api/product/detail/`,
+        postApprove: () => `${baseUrl}/api/product/approve`,
     }
 }
 

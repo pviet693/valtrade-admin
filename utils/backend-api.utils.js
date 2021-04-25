@@ -2,15 +2,31 @@ import axios from 'axios';
 import Cookie from 'js-cookie';
 import url from './url-api.utils';
 
-const token = Cookie.get('admin_token');
+let token = Cookie.get('admin_token');
 
-const config = {
+let config = {
     headers: { 
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
     },
 };
+
+const isEnable = (tokenAdmin = '') => {
+    token = tokenAdmin || Cookie.get('admin_token');
+    if (!token) {
+        return false;
+    } else {
+        config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        }
+        return true;
+    }
+}
 
 const api = {
     auth: {
@@ -28,8 +44,10 @@ const api = {
         }
     },
     adminCategory: {
-        getList: () => {
-            return axios.get(url.adminCategory.getList(), config);
+        getList: (tokenAdmin) => {
+            if (isEnable(tokenAdmin)) {
+                return axios.get(url.adminCategory.getList(), config);
+            }
         },
         createNew: (bodyCreateNew) => {
             return axios.post(url.adminCategory.postCreateNew(), bodyCreateNew, config);
@@ -92,10 +110,19 @@ const api = {
             return axios.get(url.adminProduct.getList());
         }, 
         delete: (id) => {
-            return axios.delete(url.adminProduct.deleteProduct().concat(id));
+            if (isEnable()) {
+                return axios.delete(url.adminProduct.deleteProduct().concat(id), config);
+            }
         },
-        getDetail: (id) => {
-            return axios.get(url.adminProduct.getDetail().concat(id));
+        getDetail: (id, tokenAdmin) => {
+            if (isEnable(tokenAdmin)) {
+                return axios.get(url.adminProduct.getDetail().concat(id), config);
+            }
+        },
+        postApprove: (body) => {
+            if (isEnable()) {
+                return axios.post(url.adminProduct.postApprove(), body, config);
+            }
         }
     }
 };
