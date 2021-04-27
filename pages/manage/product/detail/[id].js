@@ -15,8 +15,9 @@ const ProductDetail = (props) => {
     const [ghnChecked, setGHNChecked] = useState(false);
     const [ghtkChecked, setGHTKChecked] = useState(false);
     const [notDeliveryChecked, setNotDeliveryChecked] = useState(false);
-    const { categories, product, accept, imagesUrl, info, attr } = props;
+    const { categories, product, accept, imagesUrl, info, attr, brands } = props;
     const [category, setCategory] = useState(product.category);
+    const [brand, setBrand] = useState(props.brand);
     const [showProperty, setShowProperty] = useState(true);
     const [showError, setShowError] = useState(false);
     const [isLoading, setLoading] = useState(false);
@@ -94,6 +95,11 @@ const ProductDetail = (props) => {
             refLoadingBar.current.complete();
             common.Toast(error, 'error');
         }
+    }
+
+    const onChangeBrand = (e) => {
+        const { value } = e.target;
+        setBrand(value);
     }
 
     const addCoverImage = () => {
@@ -507,10 +513,10 @@ const ProductDetail = (props) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="form-group row align-items-center d-flex">
-                                    <label htmlFor="brand" className="col-sm-2 col-form-label">Thương hiệu: </label>
+                                <div className="form-group row align-items-center d-flex input-brand">
+                                    <label htmlFor="brand" className="col-sm-2 col-form-label">Chọn thương hiệu: </label>
                                     <div className="col-sm-6">
-                                        <input className="form-control" placeholder="Nhập thương hiệu" type="text" name="brand" id="brand" onChange={changeInput} value={propertyDefault.brand} />
+                                        <Dropdown value={brand} options={brands} onChange={onChangeBrand} optionLabel="name" filter showClear filterBy="name" placeholder="Chọn thương hiệu" id="brand" />
                                     </div>
                                 </div>
                                 <div className="form-group row align-items-center d-flex">
@@ -875,6 +881,8 @@ export async function getServerSideProps(ctx) {
     if (cookies) {
         const token = cookie.parse(cookies).admin_token;
         if (token) {
+            let brands = [];
+            let brand = { id: "", name: "" };
             let categories = [];
             let listAttribute = [];
             let product = {
@@ -918,6 +926,8 @@ export async function getServerSideProps(ctx) {
                     if (resProduct.status === 200) {
                         if (resProduct.data.code === 200) {
                             const result = resProduct.data.result;
+                            brand.id = result.brand ? (result.brand._id || "") : "";
+                            brand.name = result.brand ? (result.brand.name || "") : "";
                             product.id = result._id || "";
                             product.name = result.name || "";
                             product.description = result.description || "";
@@ -930,7 +940,6 @@ export async function getServerSideProps(ctx) {
                             product.sku = result.sku
                             product.countProduct = result.countProduct;
                             product.note = result.note;
-                            product.brand = result.brand;
                             product.restWarrantyTime = product.restWarrantyTime || 100;
 
                             result.arrayImage.forEach((image, index) => {
@@ -961,6 +970,23 @@ export async function getServerSideProps(ctx) {
                         }
                     }
                 }
+
+                const resBrand = await api.brand.getList(token);
+
+                if (resBrand.status === 200) {
+                    if (resBrand.data.code === 200) {
+                        const result = resBrand.data.result;
+                        result.forEach(x => {
+                            let item = {
+                                id: "",
+                                name: ""
+                            }
+                            item.id = x._id || "";
+                            item.name = x.name || "";
+                            brands.push(item);
+                        })
+                    }
+                }
             } catch (err) {
                 console.log(err.message);
             }
@@ -972,7 +998,9 @@ export async function getServerSideProps(ctx) {
                     accept: accept,
                     imagesUrl: urlImages,
                     info: information,
-                    attr: listAttribute
+                    attr: listAttribute,
+                    brands: brands,
+                    brand: brand
                 }
             }
         }

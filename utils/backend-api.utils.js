@@ -147,6 +147,13 @@ const api = {
         changePassword: (password) => {
             return axios.post(url.admin.changePassword(), {password:password}, config)
         }
+    },
+    brand: {
+        getList: (tokenAdmin) => {
+            if (isEnable(tokenAdmin)) {
+                return axios.get(url.brand.getList(), config);
+            }
+        }
     }
 };
 

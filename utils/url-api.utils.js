@@ -44,6 +44,9 @@ const url = {
         deleteAdmin: () => `${baseUrl}/api/admin/remove?id=`,
         updateInformation: () => `${baseUrl}/api/admin/updateInformation`,
         changePassword: () => `${baseUrl}/api/admin/changePassword`
+    },
+    brand: {
+        getList: () => `${baseUrl}/api/brand/get`,
     }
 }
 
