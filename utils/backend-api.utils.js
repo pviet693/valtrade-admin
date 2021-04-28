@@ -50,10 +50,24 @@ const api = {
             }
         },
         createNew: (bodyCreateNew) => {
-            return axios.post(url.adminCategory.postCreateNew(), bodyCreateNew, config);
+            let newConfig = {
+                headers: { 
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            };
+            return axios.post(url.adminCategory.postCreateNew(), bodyCreateNew, newConfig);
         },
         update: (bodyUpdate) => {
-            return axios.post(url.adminCategory.postUpdate(), bodyUpdate, config);
+            let newConfig = {
+                headers: { 
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            };
+            return axios.post(url.adminCategory.postUpdate(), bodyUpdate, newConfig);
         },
         delete: (id) => {
             return axios.post(url.adminCategory.postRemove(), { id: id }, config);
@@ -146,6 +160,22 @@ const api = {
         },
         changePassword: (password) => {
             return axios.post(url.admin.changePassword(), {password:password}, config)
+        },
+        getListBrand: () => {
+            return axios.get(url.admin.getListBrand(), config);
+        },
+        createBrand: (body) => {
+            return axios.post(url.admin.createBrand(), body, config);
+        },
+        deleteBrand: (id) => {
+            const urlDelete = url.admin.deleteBrand().replace(':id', id);
+            return axios.delete(urlDelete, config);
+        },
+        detailBrand: (id) => {
+            return axios.get(url.admin.getDetailBrand().concat(id), config);
+        },
+        updateBrand: (body) => {
+            return axios.put(url.admin.updateBrand(), body , config);
         }
     }
 };
