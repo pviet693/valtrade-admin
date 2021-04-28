@@ -1,12 +1,14 @@
 import Head from 'next/head';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import * as common from './../../../utils/common';
 import api from './../../../utils/backend-api.utils';
 import { UserItem } from './../../../models/user.model';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import LoadingBar from "react-top-loading-bar";
 import Moment from 'moment';
 Moment.locale('en');
 
@@ -14,9 +16,9 @@ const User = () => {
     const router = useRouter();
     const [users, setUsers] = useState([]);
     const [dateFilter, setDateFilter] = useState(null);
+    const refLoadingBar = useRef(null);
     const dt = useRef(null);
     
-
     const renderActionFilter = () => {
         return (
             <input type="text" className="p-inputtext p-component p-column-filter" disabled></input>
@@ -38,7 +40,6 @@ const User = () => {
     useEffect(async () => {
         try {
             const res = await api.adminUser.getList();
-            console.log(res);
             if (res.status === 200) {
                 if (res.data.code === 200) {
                     let listUsers = [];
@@ -55,7 +56,7 @@ const User = () => {
                     setUsers(listUsers);
                 } else {
                     let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
-                    common.Toast(res.data.message, 'error');
+                    common.Toast(message, 'error');
                 }
             }
         } catch(error) {
@@ -65,18 +66,53 @@ const User = () => {
 
     const actionFilterElement = renderActionFilter();
 
+    const onRefresh = async () => {
+        refLoadingBar.current.continuousStart();
+        try {
+            const res = await api.adminUser.getList();
+            refLoadingBar.current.complete();
+            if (res.status === 200) {
+                if (res.data.code === 200) {
+                    let listUsers = [];
+                    res.data.list.map(x => {
+                        let user = new UserItem();
+                        user.id = x._id || "";
+                        user.name = x.name || "";
+                        user.phone = x.phone || "";
+                        user.email = x.local ? (x.local.email || "") : "";
+                        user.gender = x.gender || "";
+                        user.birthday = x.birthday ? Moment(x.birthday).format("DD/MM/yyyy") : "";
+                        listUsers.push(user);
+                    })
+                    setUsers(listUsers);
+                } else {
+                    let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
+                    common.Toast(message, 'error');
+                }
+            }
+        } catch (error) {
+            common.Toast(error, 'error');
+        }
+    }
+
+    const header = (
+        <Button icon="pi pi-refresh" onClick={onRefresh} />
+    )
+
+
     return (
         <>
             <Head>
                 <title>Quản lí người dùng</title>
             </Head>
+            <LoadingBar color="#00ac96" ref={refLoadingBar} />
             <div className="user-list-container">
                 <div className="user-list-title">
                     Danh sách người dùng
                 </div>
                 <div className="user-list-content">
                     <div className="user-list-table">
-                        <DataTable value={users}
+                        <DataTable value={users} header={header}
                             ref={dt}
                             paginator rows={10} emptyMessage="Không có kết quả" currentPageReportTemplate="{first} đến {last} của {totalRecords}"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"

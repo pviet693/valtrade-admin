@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { DataTable } from 'primereact/datatable';
+import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { Calendar } from 'primereact/calendar';
 import * as common from './../../../utils/common';
@@ -8,7 +9,6 @@ import { ProductModel } from './../../../models/product.model';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import Moment from 'moment';
-import Button from '@material-ui/core/Button';
 import LoadingBar from "react-top-loading-bar";
 Moment.locale('en');
 
@@ -98,19 +98,9 @@ const Product = () => {
             <div className="d-flex justify-content-center align-items-center w-100">
             { 
                 rowData.accept ? ( 
-                    <Button
-                        className="accept"
-                        disabled
-                    >
-                        Đã phê duyệt
-                    </Button>
+                    <button className="btn accept" disabled>Đã phê duyệt</button>
                 ) : (
-                    <Button
-                        className="waitAccept"
-                        disabled
-                    >
-                        Chờ phê duyệt
-                    </Button>
+                    <button className="btn waitAccept" disabled>Chờ phê duyệt</button>
                 )
             }
         </div>
@@ -152,6 +142,40 @@ const Product = () => {
     const dateFilterElement = renderDateFilter();
     const actionFilterElement = renderActionFilter();
 
+    const onRefresh = async () => {
+        refLoadingBar.current.continuousStart();
+        try {
+            const res = await api.adminProduct.getList();
+            refLoadingBar.current.complete();
+            if (res.status === 200) {
+                if (res.data.code === 200) {
+                    let listProducts = [];
+                    res.data.result.map(x => {
+                        let product = new ProductModel();
+                        product.id = x._id || "";
+                        product.name = x.name || "";
+                        product.date_post = x.timePost ? Moment(x.timePost).format("DD/MM/yyyy") : "";
+                        product.nameOwner = x.sellerInfor ? x.sellerInfor.nameOwner : "";
+                        product.price = x.price || "";
+                        product.accept = x.accept;
+                        listProducts.push(product);
+                    })
+                    setProducts(listProducts);
+                }
+                else {
+                    let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
+                    common.Toast(message, 'error');
+                }
+            }
+        } catch (error) {
+            common.Toast(error, 'error');
+        }
+    }
+
+    const header = (
+        <Button icon="pi pi-refresh" onClick={onRefresh} />
+    )
+
     return (
         <>
             <Head>
@@ -164,7 +188,7 @@ const Product = () => {
                 </div>
                 <div className="product-list-content">
                     <div className="product-list-table">
-                        <DataTable value={products}
+                        <DataTable value={products} header={header}
                             ref={dt}
                             paginator rows={10} emptyMessage="Không có kết quả" currentPageReportTemplate="{first} đến {last} của {totalRecords}"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"

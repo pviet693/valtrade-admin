@@ -27,6 +27,16 @@
             width: 100%;
             height: 100%;
 
+            .p-datatable-header {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+
+                .p-component {
+                    width: unset;
+                }
+            }
+
             .btn {
                 padding: 4px 8px;
             }

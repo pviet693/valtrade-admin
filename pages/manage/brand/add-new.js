@@ -48,14 +48,13 @@ const CreateCategory = () => {
             formData.append("description", brand.description);
             if (img.image)
                 formData.append("image", img.image);
-            const res = await api.admin.createBrand(formData);
-            console.log(brand);
+            const res = await api.adminBrand.createBrand(formData);
             refLoadingBar.current.complete();
             setIsLoading(false);
             if (res.status === 200) {
                 if (res.data.code === 200) {
-                    common.Toast("Thêm mới thành công.", 'success');
-                    router.push('/manage/brand');
+                    common.Toast("Thêm mới thành công.", 'success')
+                        .then(() => router.push('/manage/brand'));
                 } else {
                     const message = res.data.message || "Thêm mới thất bại.";
                     common.Toast(message, 'error');

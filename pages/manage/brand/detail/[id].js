@@ -42,7 +42,7 @@ const BrandDetail = (props) => {
             formData.append("description", brand.description);
             if (newImg)
                 formData.append("image", newImg);
-            const res = await api.admin.updateBrand(formData);
+            const res = await api.adminBrand.updateBrand(formData);
             refLoadingBar.current.complete();
             setIsLoadingUpdate(false);
             if (res.status === 200) {
@@ -96,7 +96,7 @@ const BrandDetail = (props) => {
 
     useEffect(async () => {
         try {
-            const res = await api.admin.detailBrand(id);
+            const res = await api.adminBrand.detailBrand(id);
             if (res.status === 200) {
                 if (res.data.code === 200) {
                     const data = res.data.result;
@@ -111,8 +111,6 @@ const BrandDetail = (props) => {
                         setNewImg(fileData);
                     });
                     setUrl(data.imageUrl.url);
-                    
-                    console.log(brand);
                 }
             }
         } catch (error) {

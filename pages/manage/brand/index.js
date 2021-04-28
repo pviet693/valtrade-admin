@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 import LoadingBar from "react-top-loading-bar";
 import * as common from './../../../utils/common';
 import api from './../../../utils/backend-api.utils';
@@ -42,7 +43,7 @@ const Brand = () => {
                     try {
                         refLoadingBar.current.continuousStart();
 
-                        const res = await api.admin.deleteBrand(id);
+                        const res = await api.adminBrand.deleteBrand(id);
 
                         refLoadingBar.current.complete();
 
@@ -67,9 +68,37 @@ const Brand = () => {
         router.push('brand/add-new');
     }
 
+    const onRefresh = async () => {
+        refLoadingBar.current.continuousStart();
+        try {
+            const res = await api.adminBrand.getList();
+            refLoadingBar.current.complete();
+            if (res.status === 200) {
+                if (res.data.code === 200) {
+                    let listBrands = [];
+                    res.data.result.map(x => {
+                        let brand = new BrandModel();
+                        brand.id = x._id || "";
+                        brand.name = x.name || "";
+                        brand.description = x.description || "";
+                        brand.image = x.imageUrl.url || "";
+                        listBrands.push(brand);
+                    })
+                    setBrands(listBrands);
+                } else {
+                    let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
+                    common.Toast(message, 'error');
+                }
+            }
+        } catch (error) {
+            refLoadingBar.current.complete();
+            common.Toast(error, 'error');
+        }
+    }
+
     useEffect(async () => {
         try {
-            const res = await api.admin.getListBrand();
+            const res = await api.adminBrand.getList();
             if (res.status === 200) {
                 if (res.data.code === 200) {
                     let listBrands = [];
@@ -95,12 +124,22 @@ const Brand = () => {
     const actionFilterElement = renderActionFilter();
 
     const renderImage = (data) =>{
-        return <img
-            style={{ height: 'auto', width: '100px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)', maxHeight: '60px' }}
-            alt="image brand"
-            src={data.image}
-      />
+        return (
+            <div className="d-flex align-items-center justify-content-center">
+                <div className="img-box">
+                    <img    
+                        className="img-logo"
+                        alt="image brand"
+                        src={data.image}
+                    />
+                </div>
+            </div>
+        )
     }
+    
+    const header = (
+        <Button icon="pi pi-refresh" onClick={onRefresh} />
+    )
 
     return (
         <>
@@ -115,11 +154,12 @@ const Brand = () => {
                 </div>
                 <div className="brand-list-content">
                     <div className="brand-list-table">
-                        <DataTable value={brands}
+                        <DataTable value={brands} header={header}
                             ref={dt}
                             paginator rows={10} emptyMessage="Không có kết quả" currentPageReportTemplate="{first} đến {last} của {totalRecords}"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             scrollable scrollHeight="100%"
+                            removableSort
                         >
                             <Column field="name" header="Tên thương hiệu" sortable filter filterPlaceholder="Nhập tên thương hiệu"></Column>
                             <Column field="description" header="Mô tả" sortable filter filterPlaceholder="Nhập mô tả"></Column>

@@ -32,7 +32,6 @@ const CategoryDetail = (props) => {
     const onChangeInput = (event) => {
         const { name, value } = event.target;
         setCategory({ ...category, [name]: value });
-        console.log(event.target.value);
     }
 
     const updateCategory = () => {
@@ -62,8 +61,6 @@ const CategoryDetail = (props) => {
             formData.append("information", JSON.stringify(category.information));
             if (newImg)
                 formData.append("image", newImg);
-
-            console.log(category.information);
             
             const res = api.adminCategory.update(formData);
             refLoadingBar.current.complete();
@@ -273,10 +270,7 @@ const CategoryDetail = (props) => {
                         <div className="col-md-9">
                             <MultiSelect id="property" optionLabel="name" 
                                 value={properties} options={ListProperties} 
-                                onChange={(e) => {
-                                    // console.log(e.value);
-                                    setProperties([...e.value]);
-                                    console.log(properties);}}
+                                onChange={(e) => setProperties([...e.value])}
                                 filter placeholder="Chọn thuộc tính" 
                                 name="property" 
                                 className={classNames({ 'is-invalid': validate.checkEmptyInput(properties) && showError })} />

@@ -161,28 +161,25 @@ const api = {
         changePassword: (password) => {
             return axios.post(url.admin.changePassword(), {password:password}, config)
         },
-        getListBrand: () => {
-            return axios.get(url.admin.getListBrand(), config);
+    },
+    adminBrand: {
+        getList: (tokenAdmin = "") => {
+            if (isEnable(tokenAdmin)) {
+                return axios.get(url.adminBrand.getList(), config);
+            }
         },
         createBrand: (body) => {
-            return axios.post(url.admin.createBrand(), body, config);
+            return axios.post(url.adminBrand.createBrand(), body, config);
         },
         deleteBrand: (id) => {
-            const urlDelete = url.admin.deleteBrand().replace(':id', id);
+            const urlDelete = url.adminBrand.deleteBrand().replace(':id', id);
             return axios.delete(urlDelete, config);
         },
         detailBrand: (id) => {
-            return axios.get(url.admin.getDetailBrand().concat(id), config);
+            return axios.get(url.adminBrand.getDetailBrand().concat(id), config);
         },
         updateBrand: (body) => {
-            return axios.put(url.admin.updateBrand(), body , config);
-        }
-    },
-    brand: {
-        getList: (tokenAdmin) => {
-            if (isEnable(tokenAdmin)) {
-                return axios.get(url.brand.getList(), config);
-            }
+            return axios.put(url.adminBrand.updateBrand(), body, config);
         }
     }
 };

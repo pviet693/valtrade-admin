@@ -971,7 +971,7 @@ export async function getServerSideProps(ctx) {
                     }
                 }
 
-                const resBrand = await api.brand.getList(token);
+                const resBrand = await api.adminBrand.getList(token);
 
                 if (resBrand.status === 200) {
                     if (resBrand.data.code === 200) {

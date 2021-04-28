@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 import LoadingBar from "react-top-loading-bar";
 import * as common from './../../../utils/common';
 import api from './../../../utils/backend-api.utils';
@@ -93,6 +94,36 @@ const Category = () => {
 
     const actionFilterElement = renderActionFilter();
 
+    const onRefresh = async () => {
+        refLoadingBar.current.continuousStart();
+        try {
+            const res = await api.adminCategory.getList();
+            refLoadingBar.current.complete();
+            if (res.status === 200) {
+                if (res.data.code === 200) {
+                    let listCategories = [];
+                    res.data.list.map(x => {
+                        let category = new CategoryModel();
+                        category.id = x.childId || "";
+                        category.name = x.childName || "";
+                        category.update_date = x.lastTime ? Moment(x.lastTime).format("DD/MM/yyyy") : "";
+                        listCategories.push(category);
+                    })
+                    setCategories(listCategories);
+                } else {
+                    let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
+                    common.Toast(message, 'error');
+                }
+            }
+        } catch (error) {
+            common.Toast(error, 'error');
+        }
+    }
+
+    const header = (
+        <Button icon="pi pi-refresh" onClick={onRefresh} />
+    )
+
     return (
         <>
             <Head>
@@ -106,7 +137,7 @@ const Category = () => {
                 </div>
                 <div className="category-list-content">
                     <div className="category-list-table">
-                        <DataTable value={categories}
+                        <DataTable value={categories} header={header}
                             ref={dt}
                             paginator rows={10} emptyMessage="Không có kết quả" currentPageReportTemplate="{first} đến {last} của {totalRecords}"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
