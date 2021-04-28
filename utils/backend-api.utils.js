@@ -177,6 +177,13 @@ const api = {
         updateBrand: (body) => {
             return axios.put(url.admin.updateBrand(), body , config);
         }
+    },
+    brand: {
+        getList: (tokenAdmin) => {
+            if (isEnable(tokenAdmin)) {
+                return axios.get(url.brand.getList(), config);
+            }
+        }
     }
 };
 
