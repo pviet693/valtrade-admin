@@ -52,7 +52,6 @@ const CreateCategory = () => {
         });
 
         category.information = objectProperty;
-
         try {
             let formData = new FormData();
 
@@ -67,6 +66,7 @@ const CreateCategory = () => {
             if (res.status === 200) {
                 if (res.data.code === 200) {
                     common.Toast("Thêm mới thành công.", 'success');
+                    router.push('/manage/category');
                 } else {
                     const message = res.data.message || "Thêm mới thất bại.";
                     common.Toast(message, 'error');

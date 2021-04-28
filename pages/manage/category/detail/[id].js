@@ -34,7 +34,7 @@ const CategoryDetail = (props) => {
         setCategory({ ...category, [name]: value });
     }
 
-    const updateCategory = () => {
+    const updateCategory = async () => {
         setShowError(true);
         
         // if (validate.checkEmptyInput(category.name)
@@ -62,12 +62,13 @@ const CategoryDetail = (props) => {
             if (newImg)
                 formData.append("image", newImg);
             
-            const res = api.adminCategory.update(formData);
+            const res = await api.adminCategory.update(formData);
             refLoadingBar.current.complete();
             setIsLoadingUpdate(false);
             if (res.status === 200) {
                 if (res.data.code === 200) {
                     common.Toast("Cập nhật thành công.", 'success');
+                    router.push('/manage/category');
                 } else {
                     common.Toast("Cập nhật thất bạn.", 'error');
                 }
@@ -149,25 +150,23 @@ const CategoryDetail = (props) => {
                     const data = res.data.result;
                     let categoryDetail = new CategoryDetailModel();
                     categoryDetail.id = id;
-                    categoryDetail.information = JSON.parse(data.information);
+                    categoryDetail.information = JSON.stringify(data.information);
                     categoryDetail.name = data.name || "";
                     categoryDetail.description = data.description || "";
                     categoryDetail.histories = data.array_update || [];
                     setCategory(categoryDetail);
-
                     toDataURL(data.imageUrl.url)
                     .then(dataUrl => {
                         const fileData = dataURLtoFile(dataUrl, `image.png`);
                         setNewImg(fileData);
                     });
                     setUrl(data.imageUrl.url);
-
                     let listProperties = [];
                     ListProperties.forEach(x => {
-                        if (x.key in categoryDetail.information) {
+                        if (x.key in JSON.parse(categoryDetail.information)) {
                             listProperties.push(x);
                         }
-                    })
+                    });
                     setProperties(listProperties);
                 }
             }

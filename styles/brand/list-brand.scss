@@ -38,6 +38,12 @@
             width: 100%;
             height: 100%;
 
+            .desc-lineclamp{
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
             .p-datatable-header {
                 display: flex;
                 align-items: center;

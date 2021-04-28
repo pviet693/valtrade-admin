@@ -162,9 +162,9 @@ const Brand = () => {
                             removableSort
                         >
                             <Column field="name" header="Tên thương hiệu" sortable filter filterPlaceholder="Nhập tên thương hiệu"></Column>
-                            <Column field="description" header="Mô tả" sortable filter filterPlaceholder="Nhập mô tả"></Column>
+                            <Column field="description" header="Mô tả" sortable filter filterPlaceholder="Nhập mô tả" className="desc-lineclamp"></Column>
                             <Column field="image" header="Logo" sortable filterElement={actionFilterElement} filter filterMatchMode="custom" body={renderImage}></Column>
-                            <Column field="action" header="Thao tác" body={actionBodyTemplate} headerStyle={{ width: '15em', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} filterElement={actionFilterElement} filter filterMatchMode="custom" />
+                            <Column field="action" header="Thao tác" body={actionBodyTemplate} headerStyle={{ width: '15em', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible'  }} filterElement={actionFilterElement} filter filterMatchMode="custom"/>
                         </DataTable>
                     </div>
                 </div>
