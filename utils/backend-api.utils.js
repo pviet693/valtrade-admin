@@ -50,10 +50,24 @@ const api = {
             }
         },
         createNew: (bodyCreateNew) => {
-            return axios.post(url.adminCategory.postCreateNew(), bodyCreateNew, config);
+            let newConfig = {
+                headers: { 
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            };
+            return axios.post(url.adminCategory.postCreateNew(), bodyCreateNew, newConfig);
         },
         update: (bodyUpdate) => {
-            return axios.post(url.adminCategory.postUpdate(), bodyUpdate, config);
+            let newConfig = {
+                headers: { 
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            };
+            return axios.post(url.adminCategory.postUpdate(), bodyUpdate, newConfig);
         },
         delete: (id) => {
             return axios.post(url.adminCategory.postRemove(), { id: id }, config);
@@ -146,13 +160,26 @@ const api = {
         },
         changePassword: (password) => {
             return axios.post(url.admin.changePassword(), {password:password}, config)
-        }
+        },
     },
-    brand: {
-        getList: (tokenAdmin) => {
+    adminBrand: {
+        getList: (tokenAdmin = "") => {
             if (isEnable(tokenAdmin)) {
-                return axios.get(url.brand.getList(), config);
+                return axios.get(url.adminBrand.getList(), config);
             }
+        },
+        createBrand: (body) => {
+            return axios.post(url.adminBrand.createBrand(), body, config);
+        },
+        deleteBrand: (id) => {
+            const urlDelete = url.adminBrand.deleteBrand().replace(':id', id);
+            return axios.delete(urlDelete, config);
+        },
+        detailBrand: (id) => {
+            return axios.get(url.adminBrand.getDetailBrand().concat(id), config);
+        },
+        updateBrand: (body) => {
+            return axios.put(url.adminBrand.updateBrand(), body, config);
         }
     }
 };

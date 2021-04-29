@@ -43,10 +43,15 @@ const url = {
         getList: () => `${baseUrl}/api/admin/getListAdmin`, 
         deleteAdmin: () => `${baseUrl}/api/admin/remove?id=`,
         updateInformation: () => `${baseUrl}/api/admin/updateInformation`,
-        changePassword: () => `${baseUrl}/api/admin/changePassword`
+        changePassword: () => `${baseUrl}/api/admin/changePassword`,
     },
-    brand: {
+    adminBrand: {
         getList: () => `${baseUrl}/api/brand/get`,
+        createBrand: () => `${baseUrl}/api/brand/create`,
+        deleteBrand: () => `${baseUrl}/api/brand/delete/:id`,
+        getDetailBrand: () => `${baseUrl}/api/brand/detail?id=`,
+        updateBrand: () => `${baseUrl}/api/brand/update`,
+        changePassword: () => `${baseUrl}/api/admin/changePassword`
     }
 }
 

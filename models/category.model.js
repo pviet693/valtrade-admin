@@ -11,8 +11,9 @@ export class CategoryDetailModel {
         this.name = "";
         this.id = "";
         this.description = "";
-        this.histories = [];
+        // this.histories = [];
         this.information = {};
+        this.image = "";
     }
 }
 

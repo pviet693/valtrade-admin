@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import * as common from './../../../utils/common';
 import api from './../../../utils/backend-api.utils';
@@ -8,7 +9,6 @@ import { SellerItem } from './../../../models/seller.model';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import Moment from 'moment';
-import Button from '@material-ui/core/Button';
 import LoadingBar from "react-top-loading-bar";
 Moment.locale('en');
 
@@ -90,19 +90,9 @@ const Seller = () => {
             <div className="d-flex justify-content-center align-items-center w-100">
             { 
                 rowData.accept ? ( 
-                    <Button
-                        className="accept"
-                        disabled
-                    >
-                        Đã phê duyệt
-                    </Button>
+                    <button className="accept" disabled>Đã phê duyệt</button>
                 ) : (
-                    <Button
-                        className="waitAccept"
-                        disabled
-                    >
-                        Chờ phê duyệt
-                    </Button>
+                    <button className="waitAccept" disabled>Chờ phê duyệt</button>
                 )
             }
         </div>
@@ -146,18 +136,56 @@ const Seller = () => {
     const dateFilterElement = renderDateFilter();
     const actionFilterElement = renderActionFilter();
 
+    const onRefresh = async () => {
+        refLoadingBar.current.continuousStart();
+        try {
+            const res = await api.adminSeller.getList();
+            refLoadingBar.current.complete();
+            if (res.status === 200) {
+                if (res.data.code === 200) {
+                    let listSellers = [];
+                    res.data.result.map(x => {
+                        let seller = new SellerItem();
+                        seller.id = x._id || "";
+                        seller.name = x.nameOwner || "";
+                        seller.phone = x.phone || "";
+                        seller.email = x.email || "";
+                        seller.address = x.address || "";
+                        seller.shop_name = x.nameShop || "";
+                        seller.accept = x.accept;
+                        seller.birthday = x.birthday || "";
+
+                        listSellers.push(seller);
+                    })
+                    setSellers(listSellers);
+                } else {
+                    let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
+                    common.Toast(message, 'error');
+                }
+            }
+        } catch (error) {
+            common.Toast(error, 'error');
+        }
+    }
+
+    const header = (
+        <Button icon="pi pi-refresh" onClick={onRefresh} />
+    )
+
+
     return (
         <>
             <Head>
                 <title>Quản lí người bán</title>
             </Head>
+            <LoadingBar color="#00ac96" ref={refLoadingBar} />
             <div className="seller-list-container">
                 <div className="seller-list-title">
                     Danh sách người bán
                 </div>
                 <div className="seller-list-content">
                     <div className="seller-list-table">
-                        <DataTable value={sellers}
+                        <DataTable value={sellers} header={header}
                             ref={dt}
                             paginator rows={10} emptyMessage="Không có kết quả" currentPageReportTemplate="{first} đến {last} của {totalRecords}"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
