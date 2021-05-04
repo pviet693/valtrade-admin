@@ -181,6 +181,25 @@ const api = {
         updateBrand: (body) => {
             return axios.put(url.adminBrand.updateBrand(), body, config);
         }
+    },
+    adminPost: {
+        getList: () => {
+            return axios.get(url.adminPost.getList(), config); 
+        },
+        createPost: (body) =>{
+            let newConfig = {
+                headers: { 
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            };
+            return axios.post(url.adminPost.createPost(), body, newConfig);
+        },
+        deletePost: (id) => {
+            if (isEnable())
+                return axios.delete(url.adminPost.deletePost(), {id: id}, config);
+        }
     }
 };
 

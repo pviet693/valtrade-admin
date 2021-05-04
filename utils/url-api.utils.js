@@ -52,6 +52,11 @@ const url = {
         getDetailBrand: () => `${baseUrl}/api/brand/detail?id=`,
         updateBrand: () => `${baseUrl}/api/brand/update`,
         changePassword: () => `${baseUrl}/api/admin/changePassword`
+    },
+    adminPost: {
+        getList: () => `${baseUrl}/api/post/listPost`,
+        createPost: () => `${baseUrl}/api/post/createPost`,
+        deletePost: () => `${baseUrl}/api/post/deletePost`,
     }
 }
 

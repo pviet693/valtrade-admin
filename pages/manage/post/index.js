@@ -18,8 +18,13 @@ const Post = () => {
     const [dateFilter, setDateFilter] = useState(null);
     const refLoadingBar = useRef(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+    const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
     const dt = useRef(null);
     
+    const addNew = () => {
+        router.push('post/add-new-post');
+    }
 
     const renderActionFilter = () => {
         return (
@@ -28,6 +33,7 @@ const Post = () => {
     }
 
     const actionBodyTemplate = (rowData) => {
+        console.log(rowData);
         return (
             <div className="d-flex align-items-center justify-content-center">
                 <button type="button" className="btn btn-danger mr-2" onClick={() => deletePost(rowData.id)}><i className="fa fa-trash-o" aria-hidden></i> Xóa</button>
@@ -36,13 +42,58 @@ const Post = () => {
         );
     }
 
+    const deletePost = (id) => {
+        common.ConfirmDialog('Xác nhận', 'Bạn muốn xóa tin tức này?')
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    setIsLoadingDelete(true);
+                    refLoadingBar.current.continuousStart();
+                    try {
+                        const res = await api.adminPost.deletePost(id);
+                        refLoadingBar.current.complete();
+
+                        if (res.status === 200) {
+                            if (res.data.code === 200) {
+                                let newListPosts = posts.filter(x => x._id !== id);
+                                setPosts(newListPosts);
+                                common.Toast('Xóa tin tức thành công.', 'success')
+                                    .then(() => router.push('/manage/post') )
+                            } else {
+                                common.Toast('Xóa tin tức thất bại.', 'error');
+                            }
+                        }
+                    } catch (error) {
+                        refLoadingBar.current.complete();
+                        setIsLoadingDelete(false);
+                        common.Toast(error, 'error');
+                    }
+                }
+            });
+    }
+
     const viewDetail = (id) => {
-        router.push(`/manage/user/detail/${id}`);
+        router.push(`/manage/post/detail/${id}`);
     }
 
     useEffect(async () => {
         try {
-            
+            const res = await api.adminPost.getList();
+            if (res.status === 200) {
+                if (res.data.code === 200) {
+                    let listPosts = [];
+                    res.data.result.map(x => {
+                        let post = new PostModel();
+                        post.id = x._id || "";
+                        post.title = x.title || "";
+                        // post.datePost = x.datePost ? Moment(x.lastTime).format("DD/MM/yyyy") : "";
+                        listPosts.push(post);
+                    })
+                    setPosts(listPosts);
+                } else {
+                    let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
+                    common.Toast(message, 'error');
+                }
+            }
         } catch(error) {
             common.Toast(error, 'error');
         }
@@ -55,9 +106,11 @@ const Post = () => {
             <Head>
                 <title>Quản lí tin tức</title>
             </Head>
+            <LoadingBar color="#00ac96" ref={refLoadingBar} />
             <div className="post-list-container">
                 <div className="post-list-title">
-                    Danh sách tin tức
+                    <div>Danh sách tin tức</div>
+                    <button className="btn button-create-new" onClick={addNew}>Thêm mới</button>
                 </div>
                 <div className="post-list-content">
                     <div className="post-list-table">
@@ -67,9 +120,8 @@ const Post = () => {
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             scrollable scrollHeight="100%"
                         >
-                            <Column field="title" header="Tiêu đề bài đăng" sortable filter filterPlaceholder="Nhập tiêu đề"></Column>
-                            <Column field="content" header="Nội dung bài đăng" sortable filter filterPlaceholder="Nhập số điện thoại"></Column>
-                            <Column field="date_post" header="Ngày đăng" sortable filter filterPlaceholder="Nhập ngày đăng"></Column>
+                            <Column field="title" header="Tiêu đề bài đăng" sortable filter filterPlaceholder="Nhập tiêu đề" bodyStyle={{fontWeight: '600'}}></Column>
+                            <Column field="date_post" header="Ngày đăng" sortable filter filterPlaceholder="dd/mm/yyyy" ></Column>
                             <Column field="action" header="Thao tác" body={actionBodyTemplate} headerStyle={{ width: '15em', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} filterElement={actionFilterElement} filter filterMatchMode="custom" />
                         </DataTable>
                     </div>

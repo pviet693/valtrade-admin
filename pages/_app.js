@@ -21,6 +21,7 @@ import '../styles/profile.scss';
 import '../styles/create-account.scss';
 import '../styles/brand/list-brand.scss';
 import '../styles/brand/brand-detail.scss';
+import '../styles/post/post-detail.scss';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { DataProvider } from '../store/GlobalState';
