@@ -198,7 +198,16 @@ const api = {
         },
         deletePost: (id) => {
             if (isEnable())
-                return axios.delete(url.adminPost.deletePost(), {id: id}, config);
+                return axios.delete(url.adminPost.deletePost(), {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    data: {
+                        id: id
+                    }
+                });
         }
     }
 };

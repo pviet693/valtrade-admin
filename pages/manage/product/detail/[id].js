@@ -9,6 +9,8 @@ import { CategoryItemModel, ListProperties, ListPropertiesDefault, PropertyDefau
 import classNames from 'classnames';
 import cookie from "cookie";
 import { useRouter } from 'next/router';
+import { InputNumber } from 'primereact/inputnumber';
+import { Calendar } from 'primereact/calendar';
 
 const ProductDetail = (props) => {
     const router = useRouter();
@@ -435,11 +437,15 @@ const ProductDetail = (props) => {
             }
         })
         setImages(tempImages);
+
+        let temp = propertyDefault;
+        temp.restWarrantyTime = new Date(propertyDefault.restWarrantyTime);
+        setPropertyDefault(temp);
     }, [])
 
     return (
         <>
-            <div className="product-detail">
+            {/* <div className="product-detail">
                 <Head>
                     <title>Chi tiết sản phẩm</title>
                 </Head>
@@ -840,7 +846,479 @@ const ProductDetail = (props) => {
                         }
                     </div>
                 </div>
+                    </div> */}
+            <div className="product-detail">
+                <Head>
+                    <title>Chi tiết sản phẩm</title>
+                </Head>
+                <LoadingBar color="#00ac96" ref={refLoadingBar} onLoaderFinished={() => { }} />
+                <div className="product-detail-container">
+                    <div className="title">
+                        Chi tiết sản phẩm
+                    </div>
+                    <hr />
+
+                    <div className="form-input">
+                        <div className="form-group row align-items-center d-flex">
+                            <label htmlFor="name" className="col-sm-2 col-form-label">Tên sản phẩm: </label>
+                            <div className="col-sm-6">
+                                <div className="input-group">
+                                    <input className={classNames("form-control", { "is-invalid": (validate.checkEmptyInput(propertyDefault.name) || (propertyDefault.name.length > 200)) && showError })} name="name" id="name" placeholder="Nhập tên sản phẩm" type="text" onChange={changeInput} value={propertyDefault.name} />
+                                    <span className="input-group-addon">{`${propertyDefault.name.length}/200`}</span>
+                                </div>
+                                {
+                                    validate.checkEmptyInput(propertyDefault.name) && showError &&
+                                    <div className="invalid-feedback text-left">
+                                        Tên sản phẩm không được trống.
+                                    </div>
+                                }
+                                {
+                                    (propertyDefault.name.length > 200) && showError &&
+                                    <div className="invalid-feedback text-left">
+                                        Tên sản phẩm không dài quá 200 kí tự.
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div className="select-category">
+                            <div className="select-category-title">
+                                Chọn danh mục sản phẩm
+                            </div>
+                            <div className="select-category-content">
+                                <div className="align-items-center d-flex input-category row">
+                                    <label htmlFor="category" className="col-sm-2 col-form-label">Chọn danh mục: </label>
+                                    <div className="col-sm-6 px-0">
+                                        <Dropdown value={category} options={categories} onChange={onChangeCategory} optionLabel="name" filter showClear filterBy="name" placeholder="Chọn danh mục" id="category"
+                                            className={classNames({ 'p-invalid': validate.checkEmptyInput(category.name) && showError })}
+                                        />
+                                        {
+                                            validate.checkEmptyInput(category.name) && showError &&
+                                            <div className="invalid-feedback text-left">
+                                                Danh mục không được trống.
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="select-category-result row">
+                                    <div className="col-sm-2">
+                                        Danh mục đã chọn:
+                                    </div>
+                                    <div className="col-sm-6 px-0">
+                                        {category ? category.name : ""}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {
+                            showProperty &&
+                            <div>
+                                <div className="form-group row">
+                                    <label htmlFor="description" className="col-sm-2 col-form-label">Mô tả sản phẩm </label>
+                                    <div className="col-sm-6">
+                                        <textarea className={classNames("form-control", { "is-invalid": (validate.checkEmptyInput(propertyDefault.description) || (propertyDefault.description.length > 3000)) && showError })} placeholder="Mô tả sản phẩm" rows="8" name="description" id="description" onChange={changeInput} value={propertyDefault.description}></textarea>
+                                        {
+                                            validate.checkEmptyInput(propertyDefault.description) && showError &&
+                                            <div className="invalid-feedback text-left">
+                                                Mô tả không được trống.
+                                            </div>
+                                        }
+                                        {
+                                            (propertyDefault.description.length > 3000) && showError &&
+                                            <div className="invalid-feedback text-left">
+                                                Mô tả không dài quá 3000 kí tự.
+                                            </div>
+                                        }
+                                        <div className="text-right mt-1">
+                                            {`${propertyDefault.description.length}/3000`}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="price" className="col-sm-2 col-form-label">Giá bán: </label>
+                                    <div className="col-sm-6">
+                                        <div className="input-group">
+                                            <InputNumber name="price" id="price" placeholder="Nhập giá sản phẩm" onValueChange={(e) => changeInput(e)} value={propertyDefault.price}
+                                                className={classNames({ 'p-invalid': validate.checkEmptyInput(propertyDefault.price) && showError })}
+                                            />
+                                            <span className="input-group-addon">vnđ</span>
+                                        </div>
+                                        {
+                                            validate.checkEmptyInput(propertyDefault.price) && showError &&
+                                            <div className="invalid-feedback text-left">
+                                                Giá bán không được trống.
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="oldPrice" className="col-sm-2 col-form-label">Giá mua ban đầu: </label>
+                                    <div className="col-sm-6">
+                                        <div className="input-group">
+                                            <InputNumber name="oldPrice" id="oldPrice" placeholder="Nhập giá mua ban đầu" onValueChange={(e) => changeInput(e)} value={propertyDefault.oldPrice}
+                                                className={classNames({ 'p-invalid': validate.checkEmptyInput(propertyDefault.oldPrice) && showError })}
+                                            />
+                                            <span className="input-group-addon">vnđ</span>
+                                        </div>
+                                        {
+                                            validate.checkEmptyInput(propertyDefault.oldPrice) && showError &&
+                                            <div className="invalid-feedback text-left">
+                                                Giá bán không được trống.
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex input-brand">
+                                    <label htmlFor="brand" className="col-sm-2 col-form-label">Chọn thương hiệu: </label>
+                                    <div className="col-sm-6">
+                                        <Dropdown value={brand} options={brands} onChange={onChangeBrand} optionLabel="name" filter showClear filterBy="name" placeholder="Chọn thương hiệu" id="brand"
+                                            className={classNames({ 'p-invalid': validate.checkEmptyInput(brand ? brand.name : "") && showError })}
+                                        />
+                                        {
+                                            validate.checkEmptyInput(brand ? brand.name : "") && showError &&
+                                            <div className="invalid-feedback text-left">
+                                                Thương hiệu không được trống.
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="sku" className="col-sm-2 col-form-label">SKU: </label>
+                                    <div className="col-sm-6">
+                                        <input className={classNames("form-control", { 'is-invalid': validate.checkEmptyInput(propertyDefault.sku) && showError })} placeholder="Nhập sku" type="text" name="sku" id="=sku" onChange={changeInput} value={propertyDefault.sku} />
+                                        {
+                                            validate.checkEmptyInput(propertyDefault.sku) && showError &&
+                                            <div className="invalid-feedback text-left">
+                                                SKU không được trống.
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="restWarrantyTime" className="col-sm-2 col-form-label">Ngày hết hạn bảo hành: </label>
+                                    <div className="col-sm-6">
+                                        <Calendar id="date" value={new Date(propertyDefault.restWarrantyTime)} onChange={changeInput} dateFormat="dd/mm/yy" mask="99/99/9999" showIcon placeholder="Ngày hết hạn bảo hành" name="restWarrantyTime" id="restWarrantyTime"
+                                            className={classNames({ 'p-invalid': validate.checkEmptyInput(propertyDefault.restWarrantyTime) && showError })}
+                                        />
+                                        {
+                                            validate.checkEmptyInput(propertyDefault.restWarrantyTime) && showError &&
+                                            <div className="invalid-feedback text-left">
+                                                SKU không được trống.
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="countProduct" className="col-sm-2 col-form-label">Số lượng: </label>
+                                    <div className="col-sm-6">
+                                        <input placeholder="Nhập số lượng sản phẩm" type="number" name="countProduct" id="=countProduct" onChange={changeInput} value={propertyDefault.countProduct}
+                                            className={classNames('form-control', { 'is-invalid': validate.checkEmptyInput(propertyDefault.countProduct) && showError })}
+                                        />
+                                        {
+                                            validate.checkEmptyInput(propertyDefault.countProduct) && showError &&
+                                            <div className="invalid-feedback text-left">
+                                                Số lượng lớn hơn 0.
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="form-group row">
+                                    <label htmlFor="note" className="col-sm-2 col-form-label">Lưu ý: </label>
+                                    <div className="col-sm-6">
+                                        <textarea className="form-control" placeholder="Nhập lưu ý" rows="8" name="note" id="note" onChange={changeInput} value={propertyDefault.note}></textarea>
+                                        <div className="text-right mt-1">
+                                            {`${propertyDefault.note.length}/3000`}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-group row">
+                                    <label htmlFor="name-product" className="col-sm-2 col-form-label">Hình ảnh: </label>
+                                    <div className="col-sm-6 d-flex flex-row flex-wrap">
+                                        <div className="d-flex flex-column add-image-container">
+                                            <div className={classNames("add-image-box", { "invalid-image": validate.checkEmptyInput(urlImages.coverImage) && showError })}>
+                                                {
+                                                    urlImages.coverImage.url === "" &&
+                                                    <>
+                                                        <div className={classNames("add-image-circle", { "invalid-image": validate.checkEmptyInput(urlImages.coverImage) && showError })}>
+                                                            <input type="file" accept="image/*" ref={inputCoverImage} onChange={selectCoverImage} />
+                                                            <i className="fa fa-plus" aria-hidden onClick={addCoverImage}></i>
+                                                        </div>
+                                                    </>
+                                                }
+                                                {
+                                                    urlImages.coverImage.url !== "" &&
+                                                    <>
+                                                        <img src={urlImages.coverImage.url} alt="Cover Image" />
+                                                        <i className="fa fa-trash" aria-hidden onClick={() => deleteCoverImage()}></i>
+                                                    </>
+                                                }
+                                            </div>
+                                            <div className="text-center mt-2">
+                                                Hình ảnh bìa
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-column add-image-container mb-4">
+                                            <div className="add-image-box">
+                                                {
+                                                    urlImages.image1.url === "" &&
+                                                    <>
+                                                        <div className={classNames("add-image-circle")}>
+                                                            <input type="file" accept="image/*" ref={image1} onChange={selectImage1} />
+                                                            <i className="fa fa-plus" aria-hidden onClick={addImage1}></i>
+                                                        </div>
+                                                    </>
+                                                }
+                                                {
+                                                    urlImages.image1.url !== "" &&
+                                                    <>
+                                                        <img src={urlImages.image1.url} alt="Image 1" />
+                                                        <i className="fa fa-trash" aria-hidden onClick={() => deleteImage1()}></i>
+                                                    </>
+                                                }
+                                            </div>
+                                            <div className="text-center mt-2">
+                                                Hình ảnh 1
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-column add-image-container mb-4">
+                                            <div className="add-image-box">
+                                                {
+                                                    urlImages.image2.url === "" &&
+                                                    <>
+                                                        <div className={classNames("add-image-circle")}>
+                                                            <input type="file" accept="image/*" ref={image2} onChange={selectImage2} />
+                                                            <i className="fa fa-plus" aria-hidden onClick={addImage2}></i>
+                                                        </div>
+                                                    </>
+                                                }
+                                                {
+                                                    urlImages.image2.url !== "" &&
+                                                    <>
+                                                        <img src={urlImages.image2.url} alt="Image 2" />
+                                                        <i className="fa fa-trash" aria-hidden onClick={() => deleteImage2()}></i>
+                                                    </>
+                                                }
+                                            </div>
+                                            <div className="text-center mt-2">
+                                                Hình ảnh 2
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-column add-image-container mb-4">
+                                            <div className="add-image-box">
+                                                {
+                                                    urlImages.image3.url === "" &&
+                                                    <>
+                                                        <div className={classNames("add-image-circle")}>
+                                                            <input type="file" accept="image/*" ref={image3} onChange={selectImage3} />
+                                                            <i className="fa fa-plus" aria-hidden onClick={addImage3}></i>
+                                                        </div>
+                                                    </>
+                                                }
+                                                {
+                                                    urlImages.image3.url !== "" &&
+                                                    <>
+                                                        <img src={urlImages.image3.url} alt="Image 1" />
+                                                        <i className="fa fa-trash" aria-hidden onClick={() => deleteImage3()}></i>
+                                                    </>
+                                                }
+                                            </div>
+                                            <div className="text-center mt-2">
+                                                Hình ảnh 3
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-column add-image-container mb-4">
+                                            <div className="add-image-box">
+                                                {
+                                                    urlImages.image4.url === "" &&
+                                                    <>
+                                                        <div className={classNames("add-image-circle")}>
+                                                            <input type="file" accept="image/*" ref={image4} onChange={selectImage4} />
+                                                            <i className="fa fa-plus" aria-hidden onClick={addImage4}></i>
+                                                        </div>
+                                                    </>
+                                                }
+                                                {
+                                                    urlImages.image4.url !== "" &&
+                                                    <>
+                                                        <img src={urlImages.image4.url} alt="Image 1" />
+                                                        <i className="fa fa-trash" aria-hidden onClick={() => deleteImage4()}></i>
+                                                    </>
+                                                }
+                                            </div>
+                                            <div className="text-center mt-2">
+                                                Hình ảnh 4
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-column add-image-container mb-4">
+                                            <div className="add-image-box">
+                                                {
+                                                    urlImages.image5.url === "" &&
+                                                    <>
+                                                        <div className={classNames("add-image-circle")}>
+                                                            <input type="file" accept="image/*" ref={image5} onChange={selectImage5} />
+                                                            <i className="fa fa-plus" aria-hidden onClick={addImage5}></i>
+                                                        </div>
+                                                    </>
+                                                }
+                                                {
+                                                    urlImages.image5.url !== "" &&
+                                                    <>
+                                                        <img src={urlImages.image5.url} alt="Image 1" />
+                                                        <i className="fa fa-trash" aria-hidden onClick={() => deleteImage5()}></i>
+                                                    </>
+                                                }
+                                            </div>
+                                            <div className="text-center mt-2">
+                                                Hình ảnh 5
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-column add-image-container mb-4">
+                                            <div className="add-image-box">
+                                                {
+                                                    urlImages.image6.url === "" &&
+                                                    <>
+                                                        <div className={classNames("add-image-circle")}>
+                                                            <input type="file" accept="image/*" ref={image6} onChange={selectImage6} />
+                                                            <i className="fa fa-plus" aria-hidden onClick={addImage6}></i>
+                                                        </div>
+                                                    </>
+                                                }
+                                                {
+                                                    urlImages.image6.url !== "" &&
+                                                    <>
+                                                        <img src={urlImages.image6.url} alt="Image 1" />
+                                                        <i className="fa fa-trash" aria-hidden onClick={() => deleteImage6()}></i>
+                                                    </>
+                                                }
+                                            </div>
+                                            <div className="text-center mt-2">
+                                                Hình ảnh 6
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-column add-image-container mb-4">
+                                            <div className="add-image-box">
+                                                {
+                                                    urlImages.image7.url === "" &&
+                                                    <>
+                                                        <div className={classNames("add-image-circle")}>
+                                                            <input type="file" accept="image/*" ref={image7} onChange={selectImage7} />
+                                                            <i className="fa fa-plus" aria-hidden onClick={addImage7}></i>
+                                                        </div>
+                                                    </>
+                                                }
+                                                {
+                                                    urlImages.image7.url !== "" &&
+                                                    <>
+                                                        <img src={urlImages.image7.url} alt="Image 1" />
+                                                        <i className="fa fa-trash" aria-hidden onClick={() => deleteImage7()}></i>
+                                                    </>
+                                                }
+                                            </div>
+                                            <div className="text-center mt-2">
+                                                Hình ảnh 7
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-column add-image-container mb-4">
+                                            <div className="add-image-box">
+                                                {
+                                                    urlImages.image8.url === "" &&
+                                                    <>
+                                                        <div className={classNames("add-image-circle")}>
+                                                            <input type="file" accept="image/*" ref={image8} onChange={selectImage8} />
+                                                            <i className="fa fa-plus" aria-hidden onClick={addImage8}></i>
+                                                        </div>
+                                                    </>
+                                                }
+                                                {
+                                                    urlImages.image8.url !== "" &&
+                                                    <>
+                                                        <img src={urlImages.image8.url} alt="Image 1" />
+                                                        <i className="fa fa-trash" aria-hidden onClick={() => deleteImage8()}></i>
+                                                    </>
+                                                }
+                                            </div>
+                                            <div className="text-center mt-2">
+                                                Hình ảnh 8
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-group row">
+                                    <label htmlFor="name-product" className="col-sm-2 col-form-label">Video: </label>
+                                    <div className="d-flex flex-row flex-wrap align-items-center">
+                                        <div className="d-flex flex-column add-video-container">
+                                            <div className="add-video-box">
+                                                <div className="add-video-circle">
+                                                    <input type="file" accept="video/*" ref={inputVideo} onChange={selectVideo} />
+                                                    <i className="fa fa-plus" aria-hidden onClick={addVideo}></i>
+                                                </div>
+                                            </div>
+                                            <div className="text-center mt-2">
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-column">
+                                            <p>1. Kích thước: Tối đa 30Mb, độ phân giải không vượt quá 1280x1280px</p>
+                                            <p>2. Độ dài: 10s-120s</p>
+                                            <p>3. Định dạng: MP4</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-group row">
+                                    <label htmlFor="name-product" className="col-sm-2 col-form-label">Cài đặt vận chuyển: </label>
+                                    <div className="col-sm-6">
+                                        <div className="d-flex flex-row align-items-center row mb-3">
+                                            <div className="col-sm-4">Giao hàng nhanh</div>
+                                            <label className="fancy-checkbox">
+                                                <input type="checkbox" onChange={() => setGHNChecked(!ghnChecked)} checked={ghnChecked} />
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                        <div className="d-flex flex-row align-items-center row mb-3">
+                                            <div className="col-sm-4">Giao hàng tiết kiệm</div>
+                                            <label className="fancy-checkbox">
+                                                <input type="checkbox" onChange={() => setGHTKChecked(!ghtkChecked)} checked={ghtkChecked} />
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                        <div className="d-flex flex-row align-items-center row">
+                                            <div className="col-sm-4">Nhận hàng tại shop</div>
+                                            <label className="fancy-checkbox">
+                                                <input type="checkbox" onChange={() => setNotDeliveryChecked(!notDeliveryChecked)} checked={notDeliveryChecked} />
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {
+                                    attributes.map(x => {
+                                        return (
+
+                                            <div className="form-group row align-items-center d-flex" key={x.key}>
+                                                <label htmlFor={x.key} className="col-sm-2 col-form-label">{`${x.name}:`}</label>
+                                                <div className="col-sm-6">
+                                                    <input
+                                                        className={classNames("form-control", { 'is-invalid': validate.checkEmptyInput(information[x.key]) && showError })}
+                                                        value={information[x.key] || ""}
+                                                        placeholder={`${x.name}`} type="text" name={x.key} id={x.key} onChange={onChangeInformation} />
+                                                    {
+                                                        validate.checkEmptyInput(information[x.key]) && showError &&
+                                                        <div className="invalid-feedback text-left">
+                                                            {`${x.name} không được trống.`}
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
+
             <div className="product-detail-footer">
                 <button className="btn button-back" onClick={back}>Trở về</button>
                 <div className="d-flex align-items-center">
@@ -896,7 +1374,7 @@ export async function getServerSideProps(ctx) {
                 countProduct: 0,
                 note: "",
                 brand: "",
-                restWarrantyTime: 0,
+                restWarrantyTime: "",
             }
             let accept = false;
             let urlImages = {
@@ -940,7 +1418,7 @@ export async function getServerSideProps(ctx) {
                             product.sku = result.sku
                             product.countProduct = result.countProduct;
                             product.note = result.note;
-                            product.restWarrantyTime = product.restWarrantyTime || 100;
+                            product.restWarrantyTime = result.restWarrantyTime;
 
                             result.arrayImage.forEach((image, index) => {
                                 if (index === 0) {
