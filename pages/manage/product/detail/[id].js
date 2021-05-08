@@ -1417,7 +1417,7 @@ export async function getServerSideProps(ctx) {
                             product.oldPrice = result.oldPrice;
                             product.sku = result.sku
                             product.countProduct = result.countProduct;
-                            product.note = result.note;
+                            product.note = result.note || "";
                             product.restWarrantyTime = result.restWarrantyTime;
 
                             result.arrayImage.forEach((image, index) => {
