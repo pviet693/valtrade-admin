@@ -121,7 +121,7 @@ const api = {
     },
     adminProduct: {
         getList: () => {
-            return axios.get(url.adminProduct.getList());
+            return axios.get(url.adminProduct.getList(), config);
         }, 
         delete: (id) => {
             if (isEnable()) {
@@ -197,8 +197,16 @@ const api = {
             return axios.post(url.adminPost.createPost(), body, newConfig);
         },
         deletePost: (id) => {
-            if (isEnable())
-                return axios.delete(url.adminPost.deletePost(), {id: id}, config);
+            return axios.delete(url.adminPost.deletePost(), {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                data: {
+                    id: id
+                }
+            });
         }
     }
 };

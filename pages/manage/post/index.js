@@ -54,7 +54,7 @@ const Post = () => {
 
                         if (res.status === 200) {
                             if (res.data.code === 200) {
-                                let newListPosts = posts.filter(x => x._id !== id);
+                                let newListPosts = posts.filter(x => x.id !== id);
                                 setPosts(newListPosts);
                                 common.Toast('Xóa tin tức thành công.', 'success')
                                     .then(() => router.push('/manage/post') )
