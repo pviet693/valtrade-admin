@@ -121,7 +121,7 @@ const api = {
     },
     adminProduct: {
         getList: () => {
-            return axios.get(url.adminProduct.getList());
+            return axios.get(url.adminProduct.getList(), config);
         }, 
         delete: (id) => {
             if (isEnable()) {
@@ -136,6 +136,31 @@ const api = {
         postApprove: (body) => {
             if (isEnable()) {
                 return axios.post(url.adminProduct.postApprove(), body, config);
+            }
+        }
+    },
+    adminAuction: {
+        getList: () => {
+            return axios.get(url.adminAuction.getList(), config);
+        },
+        delete: (id) => {
+            if (isEnable()) {
+                return axios.delete(url.adminAuction.deleteAuction().concat(id), config);
+            }
+        },
+        getDetail: (id, tokenAdmin) => {
+            if (isEnable(tokenAdmin)) {
+                return axios.get(url.adminAuction.getDetail().concat(id), config);
+            }
+        },
+        postApprove: (body) => {
+            if (isEnable()) {
+                return axios.post(url.adminAuction.postApprove(), body, config);
+            }
+        },
+        putReject: (body) => {
+            if (isEnable()) {
+                return axios.put(url.adminAuction.putReject(), body, config);
             }
         }
     },
