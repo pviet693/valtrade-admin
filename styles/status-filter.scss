@@ -1,0 +1,45 @@
+.badge {
+    border-radius: 2px;
+    padding: .25em .5rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .3px;
+}
+
+.status {
+    width: 90%;
+    height: auto;
+    margin: auto;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%),
+    0 1px 5px 0 rgb(0 0 0 / 12%);
+}
+
+.status--rejected {
+    background-color: #ffcdd2;
+    color: #c63737;
+}
+
+.status--approved {
+    background-color: #c8e6c9;
+    color: #256029;
+}
+
+.status--pending {
+    background-color: rgba(#ff6a00, 0.4);
+    color: #805b36;
+}
+
+.status--all {
+    background-color: #b3e5fc;
+    color: #23547b;
+}
+
+.p-dropdown-status {
+    height: 36px;
+    display: flex;
+    align-items: center;
+}

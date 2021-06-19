@@ -15,7 +15,7 @@ const SideBar = () => {
         <section>
             <div id="sidebar-nav" className="sidebar">
                 <div className="sidebar-scroll">
-                    <nav>
+                    <>
                         <ul className="nav">
                             <li><Link href="/"><a className={classNames({ "active": activeLink('/') })}><i className="lnr lnr-pie-chart" aria-hidden></i> <span>Dashboard</span></a></Link></li>
                             <li><Link href="/manage/product"><a className={classNames({ "active": activeLink('/manage/product') })}><i className="lnr lnr-layers" aria-hidden></i> <span>Quản lí sản phẩm</span></a></Link></li>
@@ -28,7 +28,7 @@ const SideBar = () => {
                             <li><Link href="/manage/report"><a className={classNames({ "active": activeLink('/manage/report') })}><i className="lnr lnr-file-empty" aria-hidden="true"></i> <span>Quản lí báo cáo</span></a></Link></li>
                             <li><Link href="/manage/statistics"><a className={classNames({ "active": activeLink('/manage/statistics') })}><i className="lnr lnr-chart-bars" aria-hidden></i> <span>Thống kê</span></a></Link></li>
                         </ul>
-                    </nav>
+                    </>
                 </div>
             </div>
         </section>

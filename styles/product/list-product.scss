@@ -19,13 +19,21 @@
         background: #fff;
         box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
         font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif;
-        height: 500px;
+        height: auto;
         width: 100%;
         padding: 20px;
 
         .product-list-table {
             width: 100%;
             height: 100%;
+
+            .p-calendar.p-component {
+                padding: unset !important;
+            }
+
+            .p-datatable-scrollable-body {
+                max-height: 400px !important;
+            }
 
             .p-datatable-header {
                 display: flex;

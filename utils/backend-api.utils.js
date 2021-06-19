@@ -120,8 +120,33 @@ const api = {
         }
     },
     adminProduct: {
-        getList: () => {
-            return axios.get(url.adminProduct.getList(), config);
+        getList: (params) => {
+            let param = {};
+            let queryDate = "";
+            param.limit = params.rows;
+            param.page = params.page + 1;
+
+            if (params.filters) {
+                const filters = params.filters;
+
+                if (filters.name) param.search = filters.name.value.trim();
+                if (filters.status) param.status = filters.status.value;
+
+                if (filters.dateFilter) {
+                    if (filters.dateFilter.value[0] && filters.dateFilter.value[1]) {
+                        let start = new Date(filters.dateFilter.value[0]);
+                        let end = new Date(filters.dateFilter.value[1]);
+                        start.setHours(0, 0, 0, 0);
+                        start.setDate(start.getDate() + 1);
+                        end.setHours(0, 0, 0, 0);
+                        end.setDate(end.getDate() + 2);
+                        queryDate = `&dateFilter=${start.toISOString()}&dateFilter=${end.toISOString()}`;
+                    }
+                }
+            }
+            const query = new URLSearchParams(param);
+            
+            return axios.get(url.adminProduct.getList() + `?${query}${queryDate}`, config);
         }, 
         delete: (id) => {
             if (isEnable()) {
@@ -137,11 +162,41 @@ const api = {
             if (isEnable()) {
                 return axios.post(url.adminProduct.postApprove(), body, config);
             }
+        },
+        putReject: (body) => {
+            if (isEnable()) {
+                return axios.put(url.adminProduct.putReject(), body, config);
+            }
         }
     },
     adminAuction: {
-        getList: () => {
-            return axios.get(url.adminAuction.getList(), config);
+        getList: (params) => {
+            let param = {};
+            let queryDate = "";
+            param.limit = params.rows;
+            param.page = params.page + 1;
+
+            if (params.filters) {
+                const filters = params.filters;
+
+                if (filters.name) param.search = filters.name.value.trim();
+                if (filters.status) param.status = filters.status.value;
+
+                if (filters.dateFilter) {
+                    if (filters.dateFilter.value[0] && filters.dateFilter.value[1]) {
+                        let start = new Date(filters.dateFilter.value[0]);
+                        let end = new Date(filters.dateFilter.value[1]);
+                        start.setDate(start.getDate() + 1);
+                        start.setHours(0, 0, 0, 0);
+                        end.setDate(end.getDate() + 2);
+                        end.setHours(0, 0, 0, 0);
+                        queryDate = `&dateFilter=${start.toISOString()}&dateFilter=${end.toISOString()}`;
+                    }
+                }
+            }
+            const query = new URLSearchParams(param);
+
+            return axios.get(url.adminAuction.getList() + `?${query}${queryDate}`, config);
         },
         delete: (id) => {
             if (isEnable()) {

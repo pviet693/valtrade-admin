@@ -29,7 +29,7 @@ const PostDetail = (props) => {
                     Chi tiết tin tức
                 </title>
             </Head>
-            <LoadingBar color="#00ac96" ref={refLoadingBar} />
+            {/* <LoadingBar color="#00ac96" ref={refLoadingBar} /> */}
             <div className="post-detail-container">
                 <div className="post-detail-title">
                     <Link href="/manage/post">

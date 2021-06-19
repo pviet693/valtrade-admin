@@ -59,3 +59,7 @@ export const Notification = (title, text) => {
 
     return swal.fire({})
 }
+
+export function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}

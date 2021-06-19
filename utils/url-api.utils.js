@@ -34,7 +34,7 @@ const url = {
         deleteProduct: () => `${baseUrl}/api/product/delete/`,
         getDetail: () => `${baseUrl}/api/product/detail/`,
         postApprove: () => `${baseUrl}/api/product/approve`,
-        postReject: () => `${baseUrl}/api/product/reject`,
+        putReject: () => `${baseUrl}/api/product/reject`,
         getDetail: () => `${baseUrl}/api/product/detail/`
     },
     adminAuction: {
