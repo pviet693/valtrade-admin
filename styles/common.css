@@ -3037,6 +3037,10 @@ input[type="submit"]:focus {
   border-radius: 4px !important;
 }
 
+.ck.ck-editor__main>.ck-editor__editable {
+  min-height: 300px;
+}
+
 .navbar-fixed-bottom, .navbar-fixed-top {
   z-index: 10;
 }

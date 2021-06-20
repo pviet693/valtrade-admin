@@ -41,8 +41,31 @@ const PostDetail = ({id}) => {
     }
 
     const deletePost = () =>{
+        common.ConfirmDialog('Xác nhận', 'Bạn muốn xóa tin tức này?')
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    setIsLoadingDelete(true);
+                    refLoadingBar.current.continuousStart();
+                    try {
+                        const res = await api.adminPost.deletePost(id);
+                        refLoadingBar.current.complete();
 
-    }
+                        if (res.status === 200) {
+                            if (res.data.code === 200) {
+                                common.Toast('Xóa tin tức thành công.', 'success')
+                                    .then(() => router.push('/manage/post') )
+                            } else {
+                                common.Toast('Xóa tin tức thất bại.', 'error');
+                            }
+                        }
+                    } catch (error) {
+                        refLoadingBar.current.complete();
+                        setIsLoadingDelete(false);
+                        common.Toast(error, 'error');
+                    }
+                }
+            });
+    }   
 
     const updatePost = async () =>{
         setShowError(true);
@@ -157,7 +180,7 @@ const PostDetail = ({id}) => {
                     Chi tiết tin tức
                 </title>
             </Head>
-            {/* <LoadingBar color="#00ac96" ref={refLoadingBar} /> */}
+            <LoadingBar color="#00ac96" ref={refLoadingBar} />
             <div className="post-detail-container">
                 <div className="post-detail-title">
                     <Link href="/manage/post">

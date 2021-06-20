@@ -78,7 +78,6 @@ const Post = () => {
     useEffect(async () => {
         try {
             const res = await api.adminPost.getList();
-            console.log(res.data);
             if (res.status === 200) {
                 if (res.data.code === 200) {
                     let listPosts = [];
