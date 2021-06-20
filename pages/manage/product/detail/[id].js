@@ -4,8 +4,7 @@ import LoadingBar from "react-top-loading-bar";
 import { useRef, useState, useEffect } from 'react';
 import api from '../../../../utils/backend-api.utils';
 import * as common from './../../../../utils/common';
-import { CategoryItemModel, ListProperties, ListPropertiesDefault, PropertyDefault } from './../../../../models/category.model';
-import classNames from 'classnames';
+import { ListProperties } from './../../../../models/category.model';
 import cookie from "cookie";
 import { useRouter } from 'next/router';
 import { InputNumber } from 'primereact/inputnumber';
@@ -361,6 +360,22 @@ const ProductDetail = (props) => {
                                         )
                                     })
                                 }
+
+                                {
+                                    product.reason &&
+                                    <div className="form-group row">
+                                        <label htmlFor="reason" className="col-sm-3 col-form-label">Lý do: </label>
+                                        <div className="col-sm-9">
+                                            <textarea
+                                                name="reason"
+                                                className="form-control"
+                                                defaultValue={product.reason}
+                                                disabled
+                                                rows="8"
+                                            />
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -451,7 +466,8 @@ export async function getServerSideProps(ctx) {
                 arrayImage: [],
                 accept: false,
                 reject: false,
-                delivery: ""
+                delivery: "",
+                reason: ""
             }
             let information = {};
             try {
@@ -491,6 +507,7 @@ export async function getServerSideProps(ctx) {
                             product.reject = result.reject || false;
                             product.accept = result.accept || false;
                             product.arrayImage = result.arrayImage || [];
+                            product.reason = result.reason || "";
                             result.deliverArray.forEach(x => {
                                 if (x.ghn) product.delivery += product.delivery ? `, Giao hàng nhanh` : "Giao hàng nhanh";
                                 if (x.ghtk) product.delivery += product.delivery ? `, Giao tiết kiệm` : "Giao hàng tiết kiệm";
