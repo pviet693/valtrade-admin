@@ -3049,3 +3049,37 @@ button {
   box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%),
     0 1px 5px 0 rgb(0 0 0 / 12%);
 }
+
+.MuiDialog-paperScrollPaper {
+  min-width: 500px;
+  padding: 20px;
+}
+
+.MuiDialog-paperScrollPaper > .MuiDialogTitle-root {
+  padding: unset;
+  margin-bottom: 20px;
+}
+
+.MuiDialog-paperScrollPaper > .MuiDialogContent-root {
+  padding: unset;
+  margin-bottom: 20px;
+}
+
+.MuiDialog-paperScrollPaper > .MuiDialogActions-root {
+  padding: unset;
+}
+
+.MuiDialogActions-root > .btn--cancel {
+  background-color: #fff;
+  color: #de3535;
+  border: 1px solid #de3535;
+}
+
+.MuiDialogActions-root > .btn--reject {
+  background-color: #de3535;
+  color: #fff;
+}
+
+.MuiDialogActions-root > .btn--reject:hover, .MuiDialogActions-root > .btn--reject:focus {
+  background-color: #de3535;
+}

@@ -17,31 +17,44 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
+import { useFormik } from 'formik';
 
 const ProductDetail = (props) => {
     const router = useRouter();
-    const { categories, product, info, attr, brands } = props;
+    const { categories, product, info, attributes, brands, brand } = props;
     const [category] = useState(product.category);
-    const [brand] = useState(props.brand);
-    const [showProperty] = useState(true);
     const [loadingReject, setLoadingReject] = useState(false);
     const [loadingApprove, setLoadingApprove] = useState(false);
-    const [attributes] = useState(attr);
     const [propertyDefault, setPropertyDefault] = useState(product);
     const [information] = useState(JSON.parse(info));
     const refLoadingBar = useRef(null);
     const [open, setOpen] = useState(false);
-    const [reason, setReason] = useState("");
+    const formik = useFormik({
+        initialValues: {
+            reason: ""
+        },
+        validate: (data) => {
+            let errors = {};
+
+            if (!data.reason) errors.reason = "Lý do không được rỗng.";
+
+            return errors;
+        },
+        onSubmit: (data) => {
+            setOpen(false);
+            reject();
+        }
+    });
 
     const reject = () => {
-        common.ConfirmDialog('Xác nhận', 'Bạn muốn từ chối sản phẩm này?')
+        common.ConfirmDialog('Xác nhận', 'Bạn muốn từ chối sản phẩm này?', "Từ chối")
             .then(async (result) => {
                 if (result.isConfirmed) {
                     try {
                         setLoadingReject(true);
                         refLoadingBar.current.continuousStart();
 
-                        const res = await api.adminProduct.putReject({ id: product.id, reason });
+                        const res = await api.adminProduct.putReject({ id: product.id, reason: formik.values.reason });
 
                         setLoadingReject(false);
                         refLoadingBar.current.complete();
@@ -65,7 +78,7 @@ const ProductDetail = (props) => {
     }
 
     const approve = () => {
-        common.ConfirmDialog('Xác nhận', 'Bạn muốn chấp nhận sản phẩm này?')
+        common.ConfirmDialog('Xác nhận', 'Bạn muốn chấp nhận sản phẩm này?', "Chấp nhận")
             .then(async (result) => {
                 if (result.isConfirmed) {
                     try {
@@ -145,210 +158,210 @@ const ProductDetail = (props) => {
                                 </div>
                             </div>
 
-                            {
-                                showProperty &&
-                                <div>
+
+                            <div>
+                                <div className="form-group row">
+                                    <label htmlFor="description" className="col-sm-3 col-form-label">Mô tả sản phẩm: </label>
+                                    <div className="col-sm-9">
+                                        <textarea className="form-control"
+                                            placeholder="Mô tả sản phẩm" rows="8"
+                                            name="description" id="description"
+                                            defaultValue={propertyDefault.description} disabled></textarea>
+                                        <div className="text-right mt-1">
+                                            {`${propertyDefault.description.length}/3000`}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="price" className="col-sm-3 col-form-label">Giá bán: </label>
+                                    <div className="col-sm-9">
+                                        <div className="input-group">
+                                            <InputNumber name="price" id="price" placeholder="Nhập giá sản phẩm"
+                                                value={propertyDefault.price}
+                                                disabled
+                                            />
+                                            <span className="input-group-addon">vnđ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="oldPrice" className="col-sm-3 col-form-label">Giá mua ban đầu: </label>
+                                    <div className="col-sm-9">
+                                        <div className="input-group">
+                                            <InputNumber name="oldPrice" id="oldPrice" placeholder="Nhập giá mua ban đầu"
+                                                value={propertyDefault.oldPrice} disabled
+                                            />
+                                            <span className="input-group-addon">vnđ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex input-brand">
+                                    <label htmlFor="brand" className="col-sm-3 col-form-label">Thương hiệu: </label>
+                                    <div className="col-sm-9">
+                                        <Dropdown value={brand} options={brands}
+                                            optionLabel="name" filter showClear
+                                            filterBy="name" placeholder="Chọn thương hiệu" id="brand"
+                                            disabled
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="sku" className="col-sm-3 col-form-label">SKU: </label>
+                                    <div className="col-sm-9">
+                                        <input className="form-control"
+                                            placeholder="Nhập sku" type="text" name="sku" id="=sku"
+                                            disabled
+                                            defaultValue={propertyDefault.sku}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="restWarrantyTime" className="col-sm-3 col-form-label">Ngày hết hạn bảo hành: </label>
+                                    <div className="col-sm-9">
+                                        <Calendar id="date"
+                                            value={new Date(propertyDefault.restWarrantyTime)}
+                                            disabled
+                                            dateFormat="dd/mm/yy" mask="99/99/9999"
+                                            showIcon placeholder="Ngày hết hạn bảo hành" name="restWarrantyTime" id="restWarrantyTime"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="countProduct" className="col-sm-3 col-form-label">Số lượng: </label>
+                                    <div className="col-sm-9">
+                                        <input placeholder="Nhập số lượng sản phẩm" type="number" name="countProduct"
+                                            id="=countProduct" defaultValue={propertyDefault.countProduct}
+                                            disabled
+                                            className="form-control"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="countProduct" className="col-sm-3 col-form-label">Cân nặng: </label>
+                                    <div className="col-sm-9">
+                                        <div className="input-group">
+                                            <InputNumber name="weight" id="weight" placeholder="Nhập cân nặng"
+                                                value={propertyDefault.weight} disabled
+                                                mode="decimal" minFractionDigits={1} maxFractionDigits={2}
+                                            />
+                                            <span className="input-group-addon">gram</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="countProduct" className="col-sm-3 col-form-label">Chiều dài: </label>
+                                    <div className="col-sm-9">
+                                        <div className="input-group">
+                                            <InputNumber name="length" id="length" placeholder="Nhập chiều dài"
+                                                value={propertyDefault.length} disabled
+                                                mode="decimal" minFractionDigits={1} maxFractionDigits={2}
+                                            />
+                                            <span className="input-group-addon">cm</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="countProduct" className="col-sm-3 col-form-label">Chiều rộng: </label>
+                                    <div className="col-sm-9">
+                                        <div className="input-group">
+                                            <InputNumber name="width" id="width" placeholder="Nhập chiều rộng"
+                                                value={propertyDefault.width} disabled
+                                                mode="decimal" minFractionDigits={1} maxFractionDigits={2}
+                                            />
+                                            <span className="input-group-addon">cm</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-group row align-items-center d-flex">
+                                    <label htmlFor="countProduct" className="col-sm-3 col-form-label">Chiều cao: </label>
+                                    <div className="col-sm-9">
+                                        <div className="input-group">
+                                            <InputNumber name="height" id="height" placeholder="Nhập chiều cao"
+                                                value={propertyDefault.height} disabled
+                                                mode="decimal" minFractionDigits={1} maxFractionDigits={2}
+                                            />
+                                            <span className="input-group-addon">cm</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {
+                                    propertyDefault.note &&
                                     <div className="form-group row">
-                                        <label htmlFor="description" className="col-sm-3 col-form-label">Mô tả sản phẩm: </label>
-                                        <div className="col-sm-9">
+                                        <label htmlFor="note" className="col-sm-2 col-form-label">Lưu ý: </label>
+                                        <div className="col-sm-6">
                                             <textarea className="form-control"
-                                                placeholder="Mô tả sản phẩm" rows="8"
-                                                name="description" id="description"
-                                                defaultValue={propertyDefault.description} disabled></textarea>
+                                                placeholder="Nhập lưu ý" rows="8" name="note" id="note"
+                                                rows="8"
+                                                value={propertyDefault.note} disabled>
+                                            </textarea>
                                             <div className="text-right mt-1">
-                                                {`${propertyDefault.description.length}/3000`}
+                                                {`${propertyDefault.note.length}/3000`}
                                             </div>
                                         </div>
                                     </div>
+                                }
 
-                                    <div className="form-group row align-items-center d-flex">
-                                        <label htmlFor="price" className="col-sm-3 col-form-label">Giá bán: </label>
-                                        <div className="col-sm-9">
-                                            <div className="input-group">
-                                                <InputNumber name="price" id="price" placeholder="Nhập giá sản phẩm"
-                                                    value={propertyDefault.price}
-                                                    disabled
-                                                />
-                                                <span className="input-group-addon">vnđ</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group row align-items-center d-flex">
-                                        <label htmlFor="oldPrice" className="col-sm-3 col-form-label">Giá mua ban đầu: </label>
-                                        <div className="col-sm-9">
-                                            <div className="input-group">
-                                                <InputNumber name="oldPrice" id="oldPrice" placeholder="Nhập giá mua ban đầu"
-                                                    value={propertyDefault.oldPrice} disabled
-                                                />
-                                                <span className="input-group-addon">vnđ</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group row align-items-center d-flex input-brand">
-                                        <label htmlFor="brand" className="col-sm-3 col-form-label">Thương hiệu: </label>
-                                        <div className="col-sm-9">
-                                            <Dropdown value={brand} options={brands}
-                                                optionLabel="name" filter showClear
-                                                filterBy="name" placeholder="Chọn thương hiệu" id="brand"
-                                                disabled
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="form-group row align-items-center d-flex">
-                                        <label htmlFor="sku" className="col-sm-3 col-form-label">SKU: </label>
-                                        <div className="col-sm-9">
-                                            <input className="form-control"
-                                                placeholder="Nhập sku" type="text" name="sku" id="=sku"
-                                                disabled
-                                                defaultValue={propertyDefault.sku}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="form-group row align-items-center d-flex">
-                                        <label htmlFor="restWarrantyTime" className="col-sm-3 col-form-label">Ngày hết hạn bảo hành: </label>
-                                        <div className="col-sm-9">
-                                            <Calendar id="date"
-                                                value={new Date(propertyDefault.restWarrantyTime)}
-                                                disabled
-                                                dateFormat="dd/mm/yy" mask="99/99/9999"
-                                                showIcon placeholder="Ngày hết hạn bảo hành" name="restWarrantyTime" id="restWarrantyTime"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="form-group row align-items-center d-flex">
-                                        <label htmlFor="countProduct" className="col-sm-3 col-form-label">Số lượng: </label>
-                                        <div className="col-sm-9">
-                                            <input placeholder="Nhập số lượng sản phẩm" type="number" name="countProduct"
-                                                id="=countProduct" defaultValue={propertyDefault.countProduct}
-                                                disabled
-                                                className="form-control"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="form-group row align-items-center d-flex">
-                                        <label htmlFor="countProduct" className="col-sm-3 col-form-label">Cân nặng: </label>
-                                        <div className="col-sm-9">
-                                            <div className="input-group">
-                                                <InputNumber name="weight" id="weight" placeholder="Nhập cân nặng"
-                                                    value={propertyDefault.weight} disabled
-                                                    mode="decimal" minFractionDigits={1} maxFractionDigits={2}
-                                                />
-                                                <span className="input-group-addon">gram</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group row align-items-center d-flex">
-                                        <label htmlFor="countProduct" className="col-sm-3 col-form-label">Chiều dài: </label>
-                                        <div className="col-sm-9">
-                                            <div className="input-group">
-                                                <InputNumber name="length" id="length" placeholder="Nhập chiều dài"
-                                                    value={propertyDefault.length} disabled
-                                                    mode="decimal" minFractionDigits={1} maxFractionDigits={2}
-                                                />
-                                                <span className="input-group-addon">cm</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group row align-items-center d-flex">
-                                        <label htmlFor="countProduct" className="col-sm-3 col-form-label">Chiều rộng: </label>
-                                        <div className="col-sm-9">
-                                            <div className="input-group">
-                                                <InputNumber name="width" id="width" placeholder="Nhập chiều rộng"
-                                                    value={propertyDefault.width} disabled
-                                                    mode="decimal" minFractionDigits={1} maxFractionDigits={2}
-                                                />
-                                                <span className="input-group-addon">cm</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group row align-items-center d-flex">
-                                        <label htmlFor="countProduct" className="col-sm-3 col-form-label">Chiều cao: </label>
-                                        <div className="col-sm-9">
-                                            <div className="input-group">
-                                                <InputNumber name="height" id="height" placeholder="Nhập chiều cao"
-                                                    value={propertyDefault.height} disabled
-                                                    mode="decimal" minFractionDigits={1} maxFractionDigits={2}
-                                                />
-                                                <span className="input-group-addon">cm</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {
-                                        propertyDefault.note &&
-                                        <div className="form-group row">
-                                            <label htmlFor="note" className="col-sm-2 col-form-label">Lưu ý: </label>
-                                            <div className="col-sm-6">
-                                                <textarea className="form-control" placeholder="Nhập lưu ý" rows="8" name="note" id="note"
-                                                    value={propertyDefault.note} disabled>
-                                                </textarea>
-                                                <div className="text-right mt-1">
-                                                    {`${propertyDefault.note.length}/3000`}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-
-                                    <div className="form-group row">
-                                        <label htmlFor="name-product" className="col-sm-3 col-form-label">Hình ảnh:</label>
-                                        <div className="col-sm-9 row d-flex justify-content-between flex-wrap">
-                                            {
-                                                product.arrayImage.map((image) => (
-                                                    <div className="col-sm-4">
-                                                        <div className="image-box">
-                                                            <ReactImageZoom
-                                                                width={250}
-                                                                height={250}
-                                                                zoomWidth={500}
-                                                                img={image.url}
-                                                                zoomPosition="left"
-                                                                offset={{ vertical: 0, horizontal: 10 }}
-                                                            />
-                                                        </div>
+                                <div className="form-group row">
+                                    <label htmlFor="name-product" className="col-sm-3 col-form-label">Hình ảnh:</label>
+                                    <div className="col-sm-9 row d-flex justify-content-between flex-wrap">
+                                        {
+                                            product.arrayImage.map((image) => (
+                                                <div className="col-sm-4" key={image.id}>
+                                                    <div className="image-box">
+                                                        <ReactImageZoom
+                                                            width={250}
+                                                            height={250}
+                                                            zoomWidth={500}
+                                                            img={image.url}
+                                                            zoomPosition="left"
+                                                            offset={{ vertical: 0, horizontal: 10 }}
+                                                        />
                                                     </div>
-                                                ))
-                                            }
-                                        </div>
+                                                </div>
+                                            ))
+                                        }
                                     </div>
-                                    {/* <div className="form-group row">
+                                </div>
+                                {/* <div className="form-group row">
                                 <label htmlFor="name-product" className="col-sm-2 col-form-label">Video: </label>
                                 <div className="d-flex flex-row flex-wrap align-items-center">
                                     
                                 </div>
                             </div> */}
-                                    <div className="form-group row">
-                                        <label htmlFor="delivery" className="col-sm-3 col-form-label">Cài đặt vận chuyển: </label>
-                                        <div className="col-sm-9">
-                                            <input
-                                                id="delivery"
-                                                className="form-control"
-                                                defaultValue={product.delivery}
-                                                disabled
-                                                type="text"
-                                            />
-                                        </div>
+                                <div className="form-group row">
+                                    <label htmlFor="delivery" className="col-sm-3 col-form-label">Cài đặt vận chuyển: </label>
+                                    <div className="col-sm-9">
+                                        <input
+                                            id="delivery"
+                                            className="form-control"
+                                            defaultValue={product.delivery}
+                                            disabled
+                                            type="text"
+                                        />
                                     </div>
-
-                                    {
-                                        attributes.map(x => {
-                                            return (
-
-                                                <div className="form-group row align-items-center d-flex" key={x.key}>
-                                                    <label htmlFor={x.key} className="col-sm-3 col-form-label">{`${x.name}:`}</label>
-                                                    <div className="col-sm-9">
-                                                        <input
-                                                            className="form-control"
-                                                            defaultValue={information[x.key] || ""}
-                                                            disabled
-                                                            placeholder={`${x.name}`} type="text" name={x.key} id={x.key}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            )
-                                        })
-                                    }
                                 </div>
-                            }
+
+                                {
+                                    attributes.map(x => {
+                                        return (
+
+                                            <div className="form-group row align-items-center d-flex" key={x.key}>
+                                                <label htmlFor={x.key} className="col-sm-3 col-form-label">{`${x.name}:`}</label>
+                                                <div className="col-sm-9">
+                                                    <input
+                                                        className="form-control"
+                                                        defaultValue={information[x.key] || ""}
+                                                        disabled
+                                                        placeholder={`${x.name}`} type="text" name={x.key} id={x.key}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -361,7 +374,7 @@ const ProductDetail = (props) => {
                         <>
                             {
                                 loadingReject &&
-                                <button type="button" className="btn btn-reject mr-4" disabled><i className="fa fa-spinner fa-spin mr-2" aria-hidden></i>Xử lí...</button>
+                                <button type="button" className="btn btn--reject mr-4" disabled><i className="fa fa-spinner fa-spin mr-2" aria-hidden></i>Xử lí...</button>
                             }
                             {
                                 !loadingReject &&
@@ -382,24 +395,27 @@ const ProductDetail = (props) => {
             </div>
 
             <Dialog open={open} onClose={() => setOpen(false)} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Thêm địa chỉ mới</DialogTitle>
+                <DialogTitle id="form-dialog-title">Xác nhận từ chối</DialogTitle>
                 <DialogContent>
-                    <div className="setting-row">
-                        <label className="row-title" htmlFor="street">Lý do: </label>
-                        <input
-                            type="text" className="form-control"
-                            name="reason"
-                            placeholder="Nhập lý do..."
-                            value={reason} onChange={e => setReason(e.target.value)}
-                        />
-                    </div>
+                    <label className="mb-3" htmlFor="reason">Vui lòng nhập lí do</label>
+                    <textarea
+                        type="text" className="form-control reason-input"
+                        name="reason"
+                        placeholder="Lý do..."
+                        rows="6"
+                        value={formik.values.reason} onChange={formik.handleChange}
+                    />
+                    {
+                        formik.touched.reason && formik.errors.reason &&
+                        <small className="invalid-feedback">{formik.errors.reason}</small>
+                    }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpen(false)} className="btn btn--cancel">
                         Hủy
                     </Button>
-                    <Button onClick={reject} className="btn btn--confirm">
-                        Tạo mới
+                    <Button className="btn btn--reject" onClick={formik.handleSubmit}>
+                        Từ chối
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -520,7 +536,7 @@ export async function getServerSideProps(ctx) {
                         categories: categories,
                         product: product,
                         info: information,
-                        attr: listAttribute,
+                        attributes: listAttribute,
                         brands: brands,
                         brand: brand,
                     }
