@@ -138,12 +138,12 @@ const CreatePost = () => {
                         <label htmlFor="content" className="col-md-3 col-form-label">Nội dung</label>
                         <div className="col-md-9">
                             <Editor value={dataContent} onChange={(data) => setDataContent(data)} />
-                            {/* {
+                            {
                                 validate.checkEmptyInput(post.content) && showError &&
                                 <div className="invalid-feedback">
                                     Nội dung không được rỗng.
                                 </div>
-                            } */}
+                            }
                         </div>
                     </div>
 

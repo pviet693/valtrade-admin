@@ -78,6 +78,7 @@ const Post = () => {
     useEffect(async () => {
         try {
             const res = await api.adminPost.getList();
+            console.log(res.data);
             if (res.status === 200) {
                 if (res.data.code === 200) {
                     let listPosts = [];
@@ -85,7 +86,9 @@ const Post = () => {
                         let post = new PostModel();
                         post.id = x._id || "";
                         post.title = x.title || "";
-                        // post.datePost = x.datePost ? Moment(x.lastTime).format("DD/MM/yyyy") : "";
+                        post.imageUrl = x.imageUrl.url || "";
+                        post.content = x.content || "";
+                        post.timeCreate = x.timeCreate ? Moment(x.timeCreate).format("DD/MM/yyyy") : "";
                         listPosts.push(post);
                     })
                     setPosts(listPosts);
@@ -120,8 +123,8 @@ const Post = () => {
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             scrollable scrollHeight="100%"
                         >
-                            <Column field="title" header="Tiêu đề bài đăng" sortable filter filterPlaceholder="Nhập tiêu đề" bodyStyle={{fontWeight: '600'}}></Column>
-                            <Column field="date_post" header="Ngày đăng" sortable filter filterPlaceholder="dd/mm/yyyy" ></Column>
+                            <Column field="title" header="Tiêu đề bài đăng" sortable filter filterPlaceholder="Nhập tiêu đề" bodyStyle={{fontWeight: '500'}}></Column>
+                            <Column field="timeCreate" header="Ngày đăng" sortable filter filterPlaceholder="dd/mm/yyyy" headerStyle={{ width: '12em', textAlign: 'center' }}></Column>
                             <Column field="action" header="Thao tác" body={actionBodyTemplate} headerStyle={{ width: '15em', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} filterElement={actionFilterElement} filter filterMatchMode="custom" />
                         </DataTable>
                     </div>

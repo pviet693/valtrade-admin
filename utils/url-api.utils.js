@@ -57,6 +57,8 @@ const url = {
         getList: () => `${baseUrl}/api/post/listPost`,
         createPost: () => `${baseUrl}/api/post/createPost`,
         deletePost: () => `${baseUrl}/api/post/deletePost`,
+        detailPost: () => `${baseUrl}/api/post/detail/:id`,
+        updatePost: () => `${baseUrl}/api/post/updatePost`,
     }
 }
 

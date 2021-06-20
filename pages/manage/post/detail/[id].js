@@ -2,24 +2,152 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import LoadingBar from "react-top-loading-bar";
-import { MultiSelect } from 'primereact/multiselect';
 import { useEffect, useRef, useState } from 'react';
 import api from './../../../../utils/backend-api.utils';
 import * as common from './../../../../utils/common';
 import * as validate from './../../../../utils/validate.utils';
 import classNames from 'classnames';
-import { PostDetailModel} from '../../../../models/category.model';
+import { PostDetailModel} from '../../../../models/post.model';
 import Moment from 'moment';
+import dynamic from "next/dynamic";
 Moment.locale('en');
 
-const PostDetail = (props) => {
-    
-    const onChangeInput = () => {
+const Editor = dynamic(() => import("../../../../components/Editor"), {
+    ssr: false,
+  });
 
+const PostDetail = ({id}) => {
+    const router = useRouter();
+    const refLoadingBar = useRef(null);
+    const [showError, setShowError] = useState(false);
+    const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+    const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+    const [newImg, setNewImg] = useState(null);
+    const [url, setUrl] = useState("");
+    const image = useRef(null);
+    const [img, setImg] = useState({
+        image: null
+    })
+    const [post, setPost] = useState(new PostDetailModel());
+    const onChangeInput = () => {
+        const { name, value } = event.target;
+        setPost({ ...post, [name]: value });
     }
+    const [dataContent, setDataContent] = useState("");
+
 
     const back = () => {
         router.push('/manage/post');
+    }
+
+    const deletePost = () =>{
+
+    }
+
+    const updatePost = async () =>{
+        setShowError(true);
+        refLoadingBar.current.continuousStart();
+        setIsLoadingUpdate(true);
+        try{
+            let formData = new FormData();
+            formData.append("id", id);
+            formData.append("title", post.title);
+            formData.append("content", dataContent);
+            if (newImg)
+                formData.append("image", newImg);
+            
+            const res = await api.adminPost.updatePost(formData);
+            refLoadingBar.current.complete();
+            setIsLoadingUpdate(false);
+            if (res.status === 200) {
+                if (res.data.code === 200) {
+                    common.Toast("Cập nhật thành công.", 'success');
+                    router.push('/manage/post');
+                } else {
+                    common.Toast("Cập nhật thất bạn.", 'error');
+                }
+            }
+        }catch(error){
+            refLoadingBar.current.complete();
+            setIsLoadingUpdate(false);
+            common.Toast(error, 'error');
+        }
+    }
+
+    const addImage = () => {
+        image.current.click();
+    }
+
+    const selectImage = (e) => {
+        e.preventDefault();
+        const file = e.target.files[0];
+        if (!file) return;
+        let tempImage = img;
+        tempImage = file;
+        setNewImg(tempImage);
+
+        let tempUrl = "";
+        tempUrl = URL.createObjectURL(file);
+        setUrl(tempUrl);
+        URL.revokeObjectURL(file);
+    }
+
+    const deleteImage = () => {
+        let tempImage = img;
+        tempImage = null;
+        setNewImg(tempImage);
+
+        let tempUrl = "";
+        setUrl(tempUrl );
+    }
+
+    useEffect(async () => {
+        try {
+            const res = await api.adminPost.detailPost(id);
+
+            if (res.status === 200) {
+                if (res.data.code === 200) {
+                    const data = res.data.result;
+                    let postDetail = new PostDetailModel();
+                    postDetail.id = id;
+                    postDetail.title = data.title || "";
+                    toDataURL(data.imageUrl.url)
+                    .then(dataUrl => {
+                        const fileData = dataURLtoFile(dataUrl, `image.png`);
+                        setNewImg(fileData);
+                    });
+                    setUrl(data.imageUrl.url);
+                    postDetail.content = data.content || "";
+                    setPost(postDetail);
+                }
+            }
+        } catch (error) {
+            common.Toast(error, 'error');
+        }
+    }, [])
+
+    // convert url to base64
+    const toDataURL = (url) => fetch(url)
+        .then(response => response.blob())
+        .then(blob => new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onloadend = () => resolve(reader.result)
+            reader.onerror = reject
+            reader.readAsDataURL(blob)
+        }))
+
+    // covert base64 to file
+    const dataURLtoFile = (dataUrl, filename) => {
+        let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+
+    const onchangeEditor = (data) => {
+        setDataContent(data);
     }
 
     return (
@@ -39,15 +167,15 @@ const PostDetail = (props) => {
                         </a>
                     </Link>
                 </div>
-                <div className="category-detail-content">
+                <div className="post-detail-content">
                     <div className="form-group row my-3">
-                        <label htmlFor="name" className="col-md-3 col-form-label">Tên tin tức:</label>
+                        <label htmlFor="title" className="col-md-3 col-form-label">Tiêu đề tin tức:</label>
                         <div className="col-md-9">
-                            <input type="text" name="name" className={classNames('form-control', { 'is-invalid': validate.checkEmptyInput(post.name) && showError })} id="name" value={post.name} onChange={onChangeInput} placeholder="Nhập tên tin tức:" />
+                            <input type="text" name="title" className={classNames('form-control', { 'is-invalid': validate.checkEmptyInput(post.title) && showError })} id="title" value={post.title} onChange={onChangeInput} placeholder="Nhập tên tin tức:" />
                             {
-                                validate.checkEmptyInput(category.name) && showError &&
+                                validate.checkEmptyInput(post.title) && showError &&
                                 <div className="invalid-feedback">
-                                    Tên tin tức không được rỗng.
+                                    Tiêu đề tin tức không được rỗng.
                                 </div>
                             }
                         </div>
@@ -55,11 +183,11 @@ const PostDetail = (props) => {
                     <div className="form-group row my-4">
                         <label htmlFor="description" className="col-md-3 col-form-label">Mô tả:</label>
                         <div className="col-md-9">
-                            <textarea className={classNames('form-control', { 'is-invalid': validate.checkEmptyInput(category.description) && showError })} name="description" id="description" rows="10" onChange={onChangeInput} placeholder="Nhập mô tả" value={category.description}></textarea>
+                        <Editor value={post.content} onChange={onchangeEditor} />
                             {
-                                validate.checkEmptyInput(category.description) && showError &&
+                                validate.checkEmptyInput(post.content) && showError &&
                                 <div className="invalid-feedback">
-                                    Mô tả không được rỗng.
+                                    Nội dung không được rỗng.
                                 </div>
                             }
                         </div>
@@ -90,24 +218,6 @@ const PostDetail = (props) => {
                             </div>
                         </div>
                     </div>
-
-                    <div className="form-group row my-3">
-                        <label htmlFor="property" className="col-md-3 col-form-label">Thuộc tính danh mục:</label>
-                        <div className="col-md-9">
-                            <MultiSelect id="property" optionLabel="name" 
-                                value={properties} options={ListProperties} 
-                                onChange={(e) => setProperties([...e.value])}
-                                filter placeholder="Chọn thuộc tính" 
-                                name="property" 
-                                className={classNames({ 'is-invalid': validate.checkEmptyInput(properties) && showError })} />
-                            {
-                                validate.checkEmptyInput(properties) && showError &&
-                                <div className="invalid-feedback">
-                                    Thuộc tính danh mục không được rỗng.
-                                </div>
-                            }
-                        </div>
-                    </div>
                 </div>
 
                 <div className="post-detail-footer">
@@ -119,7 +229,7 @@ const PostDetail = (props) => {
                         }
                         {
                             !isLoadingDelete &&
-                            <button className="btn button-delete mr-4" onClick={deleteCategory}>Xóa</button>
+                            <button className="btn button-delete mr-4" onClick={deletePost}>Xóa</button>
                         }
 
                         {
@@ -128,7 +238,7 @@ const PostDetail = (props) => {
                         }
                         {
                             !isLoadingUpdate &&
-                            <button className="btn button-update" onClick={updateCategory}>Cập nhật</button>
+                            <button className="btn button-update" onClick={updatePost}>Cập nhật</button>
                         }
                     </div>
                 </div>

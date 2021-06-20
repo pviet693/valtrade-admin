@@ -122,7 +122,7 @@ const api = {
     adminProduct: {
         getList: () => {
             return axios.get(url.adminProduct.getList(), config);
-        }, 
+        },
         delete: (id) => {
             if (isEnable()) {
                 return axios.delete(url.adminProduct.deleteProduct().concat(id), config);
@@ -197,16 +197,33 @@ const api = {
             return axios.post(url.adminPost.createPost(), body, newConfig);
         },
         deletePost: (id) => {
-            return axios.delete(url.adminPost.deletePost(), {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                data: {
-                    id: id
-                }
-            });
+            // return axios.delete(url.adminPost.deletePost(), {
+            //     headers: {
+            //         Authorization: `Bearer ${token}`,
+            //         'Content-Type': 'application/json',
+            //         'Access-Control-Allow-Origin': '*'
+            //     },
+            //     data: {
+            //         id: id
+            //     }
+            // });
+            if (isEnable())
+                return axios.delete(url.adminPost.deletePost(), {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    data: {
+                        id: id
+                    }
+                });
+        },
+        detailPost: (id) => {
+            return axios.get(url.adminPost.detailPost().replace(":id",id), config);
+        },
+        updatePost: (body) => {
+            return axios.put(url.adminPost.updatePost(), body, config);
         }
     }
 };
