@@ -34,7 +34,16 @@ const url = {
         deleteProduct: () => `${baseUrl}/api/product/delete/`,
         getDetail: () => `${baseUrl}/api/product/detail/`,
         postApprove: () => `${baseUrl}/api/product/approve`,
+        putReject: () => `${baseUrl}/api/product/reject`,
         getDetail: () => `${baseUrl}/api/product/detail/`
+    },
+    adminAuction: {
+        getList: () => `${baseUrl}/api/bid/get`,
+        deleteAuction: () => `${baseUrl}/api/bid/delete/`,
+        getDetail: () => `${baseUrl}/api/bid/detail/`,
+        postApprove: () => `${baseUrl}/api/bid/approve`,
+        putReject: () => `${baseUrl}/api/bid/reject`,
+        getDetail: () => `${baseUrl}/api/bid/detail/`
     },
     admin: {
         postCreate: () => `${baseUrl}/api/admin/create`,

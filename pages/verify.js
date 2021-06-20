@@ -38,7 +38,7 @@ const Verify = (props) => {
                 if (res.data.code === 200) {
                     common.Toast('Xác thực thành công.', 'success')
                         .then(() => {
-                            Cookie.set('admin_token', res.data.token, { path: '/', expires: 30 });
+                            Cookie.set('admin_token', res.data.token, { path: '/', expires: 1 });
                             router.push('/');
                         });
                 } else {

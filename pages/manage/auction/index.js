@@ -13,7 +13,7 @@ import Moment from 'moment';
 import StatusFilter from '../../../components/StatusFilter';
 Moment.locale('en');
 
-const Product = () => {
+const Auction = () => {
     const router = useRouter();
     const [listStatus] = useState([
         { name: "Tất cả", value: "" },
@@ -42,11 +42,11 @@ const Product = () => {
         );
     }
 
-    const actionAcceptTemplate = (rowData) =>{
+    const actionAcceptTemplate = (rowData) => {
         return (
             <div className="d-flex justify-content-center align-items-center">
-                { 
-                    rowData.accept ? 
+                {
+                    rowData.accept ?
                         <div className="badge status status--approved">Đã phê duyệt</div>
                         : (
                             rowData.reject ?
@@ -60,7 +60,7 @@ const Product = () => {
     }
 
     const viewDetail = (id) => {
-        router.push(`/manage/product/detail/${id}`);
+        router.push(`/manage/auction/detail/${id}`);
     }
 
     useEffect(async () => {
@@ -70,10 +70,11 @@ const Product = () => {
     const getListProduct = async () => {
         try {
             setLoading(true);
-            const res = await api.adminProduct.getList(lazyParams);
+            const res = await api.adminAuction.getList(lazyParams);
             if (res.status === 200) {
                 if (res.data.code === 200) {
                     let listProducts = [];
+                    console.log(res.data);
                     res.data.result.map(x => {
                         let product = new ProductModel();
                         product.id = x._id || "";
@@ -137,10 +138,11 @@ const Product = () => {
         let _lazyParams = { ...lazyParams, ...event };
         _lazyParams['first'] = 0;
         setLazyParams(_lazyParams);
+        console.log(_lazyParams);
     }
 
-    const filterDate = <Calendar id="pr_id_1" value={selectedDate} onChange={onDateChange} dateFormat="dd/mm/yy" className="p-column-filter" placeholder="Chọn ngày" selectionMode="range" readOnlyInput showButtonBar />;
-    const filterStatus = <StatusFilter value={status} onChange={onStatusChange} options={listStatus}/>
+    const filterDate = <Calendar value={selectedDate} onChange={onDateChange} dateFormat="dd/mm/yy" className="p-column-filter" placeholder="Chọn ngày" selectionMode="range" readOnlyInput showButtonBar />;
+    const filterStatus = <StatusFilter value={status} onChange={onStatusChange} options={listStatus} />
     const header = <HeaderTable onRefresh={onRefresh} />
 
     return (
@@ -165,11 +167,11 @@ const Product = () => {
                             onFilter={onFilter} filters={lazyParams.filters} loading={loading}
                             emptyMessage="Không có kết quả"
                         >
-                            <Column field="name" header="Tên sản phẩm" sortable filter filterPlaceholder="Nhập tên sản phẩm" style={{ width: '30%' }}></Column>
+                            <Column field="name" header="Tên sản phẩm" sortable filter filterPlaceholder="Nhập tên sản phẩm" style={{ width: '24%' }}></Column>
                             <Column field="date_post" header="Ngày tạo" sortable filter filterMatchMode="custom" filterElement={filterDate} style={{ width: '20%' }}></Column>
-                            <Column field="price" header="Giá bán" sortable filter filterPlaceholder="Nhập giá bán" filterElement={NoneFilter()} filter style={{ width: '15%' }}></Column>
+                            <Column field="price" header="Giá bán" sortable filter filterPlaceholder="Nhập giá bán" filterElement={NoneFilter()} filter style={{ width: '16%' }}></Column>
                             <Column field="accept" header="Trạng thái" body={actionAcceptTemplate} filterElement={filterStatus} filter filterMatchMode="custom" style={{ width: '20%' }} />
-                            <Column field="action" header="Thao tác" body={actionBodyTemplate} filterElement={NoneFilter()} filter style={{ width: '15%' }}/>
+                            <Column field="action" header="Thao tác" body={actionBodyTemplate} filterElement={NoneFilter()} filter style={{ width: '20%' }} />
                         </DataTable>
                     </div>
                 </div>
@@ -178,4 +180,4 @@ const Product = () => {
     )
 }
 
-export default Product;
+export default Auction;
