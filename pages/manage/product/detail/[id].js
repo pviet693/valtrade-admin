@@ -288,8 +288,8 @@ const ProductDetail = (props) => {
                                 {
                                     propertyDefault.note &&
                                     <div className="form-group row">
-                                        <label htmlFor="note" className="col-sm-2 col-form-label">Lưu ý: </label>
-                                        <div className="col-sm-6">
+                                        <label htmlFor="note" className="col-sm-3 col-form-label">Lưu ý: </label>
+                                        <div className="col-sm-9">
                                             <textarea className="form-control"
                                                 placeholder="Nhập lưu ý" rows="8" name="note" id="note"
                                                 rows="8"
