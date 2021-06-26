@@ -25,7 +25,7 @@ const url = {
         getList: () => `${baseUrl}/api/seller/listSeller`,
         postCreateNew: () => `${baseUrl}/api/seller/register`,
         postUpdate: () => `${baseUrl}/api/seller/update`,
-        getDetail: () => `${baseUrl}/api/seller/get/`,
+        getDetail: () => `${baseUrl}/api/seller/detail/`,
         postAccept: () => `${baseUrl}/api/seller/accept`,
         deleteSeller: () => `${baseUrl}/api/seller/delete/`,
     },
