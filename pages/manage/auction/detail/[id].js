@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Dropdown } from 'primereact/dropdown';
 import LoadingBar from "react-top-loading-bar";
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import api from '../../../../utils/backend-api.utils';
 import * as common from './../../../../utils/common';
 import { ListProperties } from './../../../../models/category.model';
@@ -17,9 +17,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import { useFormik } from 'formik';
+import { DataContext } from '../../../../store/GlobalState';
 
 const AuctionDetail = (props) => {
     const router = useRouter();
+    const { socket } = useContext(DataContext);
     const { categories, product, info, attributes, brands, brand } = props;
     const [category] = useState(product.category);
     const [loadingReject, setLoadingReject] = useState(false);
@@ -92,7 +94,13 @@ const AuctionDetail = (props) => {
                         if (res.status === 200) {
                             if (res.data.code === 200) {
                                 common.Toast('Thành công.', 'success')
-                                    .then(() => router.push('/manage/auction'));
+                                    .then(() => {
+                                        socket.emit("newBid", {
+                                            id: product.id,
+                                            countDown: product.countDown
+                                        })
+                                        router.push('/manage/auction')
+                                    });
                             } else {
                                 const message = res.data.message || 'Thất bại.';
                                 common.Toast(message, 'error');
