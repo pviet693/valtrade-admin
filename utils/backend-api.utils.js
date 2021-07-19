@@ -227,7 +227,9 @@ const api = {
             return axios.post(url.admin.postVerify(), body);
         },
         getProfile: () => {
-            return axios.get(url.admin.getProfile(),config);
+            if (isEnable()) {
+                return axios.get(url.admin.getProfile(), config);
+            }
         },
         getList: () => {
             return axios.get(url.admin.getList(), config);

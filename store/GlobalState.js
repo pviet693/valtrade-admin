@@ -3,6 +3,7 @@ import reducers from './Reducers';
 import Cookie from 'js-cookie';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { io } from "socket.io-client";
 
 export const DataContext = createContext();
 
