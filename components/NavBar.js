@@ -32,12 +32,12 @@ const NavBar = () => {
     return (
         <>
             <nav className="navbar navbar-default navbar-fixed-top">
-                <div className="brand">
-                    <Link href="/product"><a><img src="/static/assets/img/logo-dark.png" alt="Logo" className="img-responsive logo" /></a></Link>
+                <div className="brand pt-0 pb-0 pl-0" style={{ paddingRight: "20px" }}>
+                    <Link href="/product"><a><img src="/static/assets/img/logo.png" alt="Logo" className="img-responsive logo" width="260" height="75" /></a></Link>
                 </div>
                 <div className="container-fluid">
                     <div className="navbar-btn">
-                        <button type="button" className="btn-toggle-fullwidth"><i className="lnr lnr-arrow-left-circle"></i></button>
+                        <button type="button" className="btn-toggle-fullwidth" style={{ boxShadow: "unset" }}><i className="lnr lnr-arrow-left-circle"></i></button>
                     </div>
                     <form className="navbar-form navbar-left">
                         <div className="input-group">
