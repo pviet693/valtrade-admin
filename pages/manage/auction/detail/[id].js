@@ -27,7 +27,12 @@ const AuctionDetail = (props) => {
     const [loadingReject, setLoadingReject] = useState(false);
     const [loadingApprove, setLoadingApprove] = useState(false);
     const [propertyDefault, setPropertyDefault] = useState(product);
-    const [information] = useState(info);
+    const [information] = useState(() => {
+        if (typeof info === "string") {
+            return JSON.parse(info);
+        }
+        return info;
+    });
     const refLoadingBar = useRef(null);
     const [open, setOpen] = useState(false);
     const formik = useFormik({
