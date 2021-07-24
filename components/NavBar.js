@@ -33,7 +33,7 @@ const NavBar = () => {
         <>
             <nav className="navbar navbar-default navbar-fixed-top">
                 <div className="brand pt-0 pb-0 pl-0" style={{ paddingRight: "20px" }}>
-                    <Link href="/product"><a><img src="/static/assets/img/logo.png" alt="Logo" className="img-responsive logo" width="260" height="75" /></a></Link>
+                    <Link href="/manage/product"><a><img src="/static/assets/img/logo.png" alt="Logo" className="img-responsive logo" width="260" height="75" /></a></Link>
                 </div>
                 <div className="container-fluid">
                     <div className="navbar-btn">
@@ -42,7 +42,7 @@ const NavBar = () => {
                     <form className="navbar-form navbar-left">
                         <div className="input-group">
                             <input type="text" value="" name="search" className="form-control" placeholder="Tìm kiếm..." onChange={changeSearch} />
-                            <span className="input-group-btn"><button type="button" className="btn btn-primary">Tìm</button></span>
+                            <span className="input-group-btn"><button type="button" className="btn btn-primary" style={{ boxShadow: "unset" }}>Tìm</button></span>
                         </div>
                     </form>
                     <div id="navbar-menu">
