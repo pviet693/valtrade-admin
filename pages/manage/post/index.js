@@ -33,7 +33,6 @@ const Post = () => {
     }
 
     const actionBodyTemplate = (rowData) => {
-        console.log(rowData);
         return (
             <div className="d-flex align-items-center justify-content-center">
                 <button type="button" className="btn btn-danger mr-2" onClick={() => deletePost(rowData.id)}><i className="fa fa-trash-o" aria-hidden></i> Xóa</button>

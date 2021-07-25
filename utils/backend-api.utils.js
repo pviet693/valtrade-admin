@@ -305,6 +305,11 @@ const api = {
         updatePost: (body) => {
             return axios.put(url.adminPost.updatePost(), body, config);
         }
+    },
+    adminNotification: {
+        createNotification: (body) => {
+            return axios.post(url.adminNotification.createNotification(), body, config);
+        }
     }
 };
 

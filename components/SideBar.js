@@ -25,6 +25,7 @@ const SideBar = () => {
                             <li><Link href="/manage/user"><a className={classNames({ "active": activeLink('/manage/user') })}><i className="lnr lnr-users" aria-hidden></i> <span>Quản lí người dùng</span></a></Link></li>
                             <li><Link href="/manage/seller"><a className={classNames({ "active": activeLink('/manage/seller') })}><i className="lnr lnr-user" aria-hidden></i> <span>Quản lí người bán</span></a></Link></li>
                             <li><Link href="/manage/post"><a className={classNames({ "active": activeLink('/manage/post') })}><i className="lnr lnr-bookmark" aria-hidden></i> <span>Quản lí tin tức</span></a></Link></li>
+                            <li><Link href="/manage/notification"><a className={classNames({ "active": activeLink('/manage/notification') })}><i className="lnr lnr-alarm" aria-hidden></i> <span>Quản lí thông báo</span></a></Link></li>
                             <li><Link href="/manage/report"><a className={classNames({ "active": activeLink('/manage/report') })}><i className="lnr lnr-file-empty" aria-hidden="true"></i> <span>Quản lí báo cáo</span></a></Link></li>
                         </ul>
                     </>

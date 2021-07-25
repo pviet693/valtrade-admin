@@ -68,6 +68,9 @@ const url = {
         deletePost: () => `${baseUrl}/api/post/deletePost`,
         detailPost: () => `${baseUrl}/api/post/detail/:id`,
         updatePost: () => `${baseUrl}/api/post/updatePost`,
+    },
+    adminNotification: {
+        createNotification: () => `${baseUrl}/api/notification/create`,
     }
 }
 

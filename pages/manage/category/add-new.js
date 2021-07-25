@@ -46,7 +46,7 @@ const CreateCategory = () => {
         setIsLoading(true);
 
         let objectProperty = {};
-
+        console.log(properties);
         properties.forEach(x => {
             objectProperty[x.key] = null;
         });

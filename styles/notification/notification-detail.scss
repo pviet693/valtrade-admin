@@ -1,0 +1,100 @@
+.notification-detail-container {
+    width: 100%;
+    height: 100%;
+    padding: 28px 25px 0;
+
+    .notification-detail-title {
+        font-size: 1.4rem;
+        color: #566374;
+        font-weight: 500;
+        height: 80px;
+        margin: 0 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+
+        i {
+            font-size: 1em;
+        }
+
+        div {
+            margin-bottom: 2px;
+        }
+    }
+
+    .notification-detail-content {
+        color: #000;
+        background: #fff;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
+        font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif;
+        height: auto;
+        width: 100%;
+        padding: 20px;
+        font-size: 14px;
+        margin-bottom: 120px;
+
+        .form-group {
+            .p-calendar {
+                height: 40px;
+                width: 100%;
+
+                .p-inputtext {
+                    font-size: 14px;
+                    padding: 6px 12px;
+                }
+
+                .p-button.p-button-icon-only {
+                    width: 40px;
+                }
+            }
+        }
+
+        .p-multiselect {
+            width: 100%;
+            height: 40px;
+        }
+    }
+    .notification-detail-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #fff;
+        box-shadow: 0 -1px 2px 0 rgb(0 0 0 / 13%);
+        bottom: 0;
+        height: 100px;
+        padding: 15px;
+        left: 260px;
+        right: 0;
+        position: fixed;
+    
+        button {
+            border-radius: 4px;
+        }
+    
+        .button-back {
+            background-color: #fff;
+            color: #0795DF;
+            width: 150px;
+            height: 40px;
+            border: 1px solid #0795DF;
+
+            &:focus {
+                border: 1px solid #0795DF;
+            }
+        }
+    
+        .button-update {
+            background-color: #0795DF;
+            color: #fff;
+            width: 150px;
+            height: 40px;
+        }
+    
+        .button-delete {
+            background-color: #DE3535;
+            color: #fff;
+            width: 150px;
+            height: 40px;
+        }
+    }
+}
