@@ -15,6 +15,8 @@ import '../styles/category/list-category.scss';
 import '../styles/category/category-detail.scss';
 import '../styles/product/product-detail.scss';
 import '../styles/post/list-post.scss';
+import '../styles/report/list-report.scss';
+import '../styles/report/report-detail.scss';
 import '../styles/notification/list-notification.scss';
 import '../styles/verify-account.scss';
 import '../styles/product/list-product.scss';

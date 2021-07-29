@@ -14,7 +14,7 @@ Moment.locale('en');
 
 const Editor = dynamic(() => import("../../../../components/Editor"), {
     ssr: false,
-  });
+});
 
 const PostDetail = ({id}) => {
     const router = useRouter();

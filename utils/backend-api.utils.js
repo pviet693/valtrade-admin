@@ -227,7 +227,9 @@ const api = {
             return axios.post(url.admin.postVerify(), body);
         },
         getProfile: () => {
-            return axios.get(url.admin.getProfile(),config);
+            if (isEnable()) {
+                return axios.get(url.admin.getProfile(), config);
+            }
         },
         getList: () => {
             return axios.get(url.admin.getList(), config);
@@ -309,6 +311,14 @@ const api = {
     adminNotification: {
         createNotification: (body) => {
             return axios.post(url.adminNotification.createNotification(), body, config);
+        },
+        getListNotification: () => {
+            return axios.get(url.adminNotification.getListNotification(), config);
+        }
+    },
+    adminReport: {
+        getList: () => {
+            return axios.get(url.adminReport.getListReport(), config);
         }
     }
 };

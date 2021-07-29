@@ -25,7 +25,12 @@ const ProductDetail = (props) => {
     const [loadingReject, setLoadingReject] = useState(false);
     const [loadingApprove, setLoadingApprove] = useState(false);
     const [propertyDefault, setPropertyDefault] = useState(product);
-    const [information] = useState(JSON.parse(info));
+    const [information] = useState(() => {
+        if (typeof info === "string") {
+            return JSON.parse(info);
+        }
+        return info;
+    });
     const refLoadingBar = useRef(null);
     const [open, setOpen] = useState(false);
     const formik = useFormik({
@@ -93,7 +98,11 @@ const ProductDetail = (props) => {
                             if (res.data.code === 200) {
                                 common.Toast('Thành công.', 'success')
                                     .then(() => router.push('/manage/product'));
-                            } else {
+                            } else if ( res.data.code === 301) {
+                                common.Toast('Tài khoản người bán không đủ tiền', 'error')
+                                    .then(()=> router.push('/manage/product'));
+                            }
+                            else{
                                 const message = res.data.message || 'Thất bại.';
                                 common.Toast(message, 'error');
                             }

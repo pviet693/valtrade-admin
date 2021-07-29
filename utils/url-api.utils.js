@@ -1,4 +1,4 @@
-const baseUrl = "http://3.142.207.62:5000";
+export const baseUrl = "https://valtrade-api.tech";
 
 const url = {
     auth: {
@@ -71,6 +71,10 @@ const url = {
     },
     adminNotification: {
         createNotification: () => `${baseUrl}/api/notification/create`,
+        getListNotification: () => `${baseUrl}/api/notification/list`
+    },
+    adminReport: {
+        getListReport: () => `${baseUrl}/api/report/getListReport`
     }
 }
 

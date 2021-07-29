@@ -46,25 +46,26 @@ const Notification = () => {
 
     useEffect(async () => {
         try {
-            // const res = await api.adminPost.getList();
-            // if (res.status === 200) {
-            //     if (res.data.code === 200) {
-            //         let listPosts = [];
-            //         res.data.result.map(x => {
-            //             let post = new PostModel();
-            //             post.id = x._id || "";
-            //             post.title = x.title || "";
-            //             post.imageUrl = x.imageUrl.url || "";
-            //             post.content = x.content || "";
-            //             post.timeCreate = x.timeCreate ? Moment(x.timeCreate).format("DD/MM/yyyy") : "";
-            //             listPosts.push(post);
-            //         })
-            //         setPosts(listPosts);
-            //     } else {
-            //         let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
-            //         common.Toast(message, 'error');
-            //     }
-            // }
+            const res = await api.adminNotification.getListNotification();
+            console.log(res);
+            if (res.status === 200) {
+                if (res.data.code === 200) {
+                    // let listNotification = [];
+                    // res.data.result.map(x => {
+                    //     let post = new PostModel();
+                    //     post.id = x._id || "";
+                    //     post.title = x.title || "";
+                    //     post.imageUrl = x.imageUrl.url || "";
+                    //     post.content = x.content || "";
+                    //     post.timeCreate = x.timeCreate ? Moment(x.timeCreate).format("DD/MM/yyyy") : "";
+                    //     listPosts.push(post);
+                    // })
+                    // setPosts(listPosts);
+                } else {
+                    let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
+                    common.Toast(message, 'error');
+                }
+            }
         } catch(error) {
             common.Toast(error, 'error');
         }
