@@ -13,34 +13,37 @@ const ReportDetail = (props) => {
     const router = useRouter();
     const [isLoadingDelete, setIsLoadingDelete] = useState(false);
     const { id } = props;
-    // const [report, setReport] = useState(new UserDetailModel());
-    let report = {
-        name: "ipad pro 11 inch wifi cellular 128gb (2020)",
-        link: "https://www.valtrade.me/product-detail?id=60d1c3cde0c69a23fa2a59ca",
-        reporter: "Nguyễn Nhật Tân",
-        poster: "Phạm Văn Việt",
-        content: "Sản phẩm không đúng chất lượng"
-    }
+
+    const [report, setReport] = useState({
+        name: "",
+        link: "",
+        reporter: "",
+        poster: "",
+        content: "",
+        dateReport: "",
+        title: ""
+    });
     useEffect(async () => {
-        // try {
-        //     const res = await api.adminUser.getDetail(id);
-        //     if (res.status === 200) {
-        //         if (res.data.code === 200) {
-        //             const data = res.data.result._doc;
-        //             let userDetail = new UserDetailModel();
-        //             userDetail.name = data.name || "";
-        //             userDetail.phone = data.phone || "";
-        //             userDetail.email = data.local.email || "";
-        //             userDetail.address = data.address || "";
-        //             userDetail.gender = data.gender || "";
-        //             userDetail.birthday = data.birthday || "";
-        //             userDetail.avatar = data.imageUrl.url || "";
-        //             setUser(userDetail);
-        //         }
-        //     }
-        // } catch(error) {
-        //     common.Toast(error, 'error');
-        // }
+        try {
+            const res = await api.adminReport.detailReport(id);
+            console.log(res);
+            if (res.status === 200) {
+                if (res.data.code === 200) {
+                    const data = res.data.result;
+                    let reportDetail = {};
+                    reportDetail.name = data.reportId.name || "";
+                    reportDetail.link = `https://valtrade.me/product-detail?id=${data.reportId._id}`
+                    reportDetail.reporter = data.reportId.sellerInfor.nameOwner || "";
+                    reportDetail.poster = data.userReport.name || "";
+                    reportDetail.content = data.content || "";
+                    reportDetail.dateReport = data.timeReport ? Moment(data.timeReport).format("DD/MM/yyyy") : "";
+                    reportDetail.title = data.title || "";
+                    setReport(reportDetail);
+                }
+            }
+        } catch(error) {
+            common.Toast(error, 'error');
+        }
     }, [])
 
     const back = () => {
@@ -96,31 +99,46 @@ const ReportDetail = (props) => {
                             <div className="form-group row align-items-center d-flex">
                                 <label htmlFor="name" className="col-md-3 col-form-label">Tên sản phẩm</label>
                                 <div className="col-md-9">
-                                    <input type="text" className="form-control" id="name" placeholder="Tên sản phẩm" name="name" defaultValue={report.name} />
+                                    <input type="text" className="form-control" id="name" placeholder="Tên sản phẩm" name="name" defaultValue={report.name} disabled/>
                                 </div>
                             </div>
                             <div className="form-group row align-items-center d-flex">
                                 <label htmlFor="link" className="col-md-3 col-form-label">Link sản phẩm</label>
                                 <div className="col-md-9">
-                                    <input type="text" className="form-control" id="link" placeholder="Link sản phẩm" name="link" defaultValue={report.link} />
+                                    <div className="form-control">
+                                        <a href={report.link} target="_blank">{report.link}</a>
+                                    </div>
+                                    {/* <input type="text" className="form-control" id="link" placeholder="Link sản phẩm" name="link" defaultValue={report.link} /> */}
                                 </div>
                             </div>
                             <div className="form-group row align-items-center d-flex">
                                 <label htmlFor="reporter" className="col-md-3 col-form-label">Người báo cáo</label>
                                 <div className="col-md-9">
-                                    <input type="text" className="form-control" id="reporter" placeholder="Người báo cáo" name="reporter" defaultValue={report.reporter} />
+                                    <input type="text" className="form-control" id="reporter" placeholder="Người báo cáo" name="reporter" defaultValue={report.reporter} disabled />
                                 </div>
                             </div>
                             <div className="form-group row align-items-center d-flex">
                                 <label htmlFor="poster" className="col-md-3 col-form-label">Người đăng sản phẩm</label>
                                 <div className="col-md-9">
-                                    <input type="text" className="form-control" id="poster" placeholder="Người đăng sản phẩm" name="poster" defaultValue={report.poster} />
+                                    <input type="text" className="form-control" id="poster" placeholder="Người đăng sản phẩm" name="poster" defaultValue={report.poster} disabled/>
+                                </div>
+                            </div>
+                            <div className="form-group row align-items-center d-flex">
+                                <label htmlFor="title" className="col-md-3 col-form-label">Tiêu đề báo cáo</label>
+                                <div className="col-md-9">
+                                    <input type="text" className="form-control" id="title" placeholder="Tiêu đề báo cáo" name="title" defaultValue={report.title} disabled/>
                                 </div>
                             </div>
                             <div className="form-group row align-items-center d-flex">
                                 <label htmlFor="content" className="col-md-3 col-form-label">Nội dung báo cáo</label>
                                 <div className="col-md-9">
-                                    <input type="text" className="form-control" id="content" placeholder="Nội dung báo cáo" name="content" defaultValue={report.content} />
+                                    <input type="text" className="form-control" id="content" placeholder="Nội dung báo cáo" name="content" defaultValue={report.content} disabled/>
+                                </div>
+                            </div>
+                            <div className="form-group row align-items-center d-flex">
+                                <label htmlFor="dateReport" className="col-md-3 col-form-label">Ngày báo cáo</label>
+                                <div className="col-md-9">
+                                    <input type="text" className="form-control" id="dateReport" placeholder="Ngày báo cáo" name="dateReport" defaultValue={report.dateReport} disabled/>
                                 </div>
                             </div>
                         </div>

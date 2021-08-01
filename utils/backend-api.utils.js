@@ -319,6 +319,9 @@ const api = {
     adminReport: {
         getList: () => {
             return axios.get(url.adminReport.getListReport(), config);
+        },
+        detailReport: (id) => {
+            return axios.get(url.adminReport.detailReport().replace(":id",id), config);
         }
     }
 };

@@ -74,7 +74,8 @@ const url = {
         getListNotification: () => `${baseUrl}/api/notification/list`
     },
     adminReport: {
-        getListReport: () => `${baseUrl}/api/report/getListReport`
+        getListReport: () => `${baseUrl}/api/report/getListReport`,
+        detailReport: () => `${baseUrl}/api/report/detail/:id`,
     }
 }
 

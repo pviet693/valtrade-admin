@@ -59,9 +59,10 @@
     padding: 20px;
     width: 100%;
     justify-content: space-between;
-    position: fixed;
+    position: sticky;
     bottom: 0;
     display: flex;
+    justify-content: space-between;
     button {
       border-radius: 4px;
     }
@@ -83,7 +84,6 @@
         color: #fff;
         width: 150px;
         height: 40px;
-        margin-right: 270px !important;
     }
   }
 
