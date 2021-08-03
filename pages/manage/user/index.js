@@ -120,7 +120,7 @@ const User = () => {
                         >
                             <Column field="name" header="Họ và tên" sortable filter filterPlaceholder="Nhập tên"></Column>
                             <Column field="phone" header="Số điện thoại" sortable filter filterPlaceholder="Nhập số điện thoại"></Column>
-                            <Column field="email" header="Email" sortable filter filterPlaceholder="Nhập email" ></Column>
+                            <Column field="email" header="Email" sortable filter filterPlaceholder="Nhập email" style={{width: '15em'}} ></Column>
                             <Column field="gender" header="Giới tính" sortable filter filterPlaceholder="Nhập giới tính"></Column>
                             <Column field="birthday" header="Ngày sinh" sortable filter filterPlaceholder="Nhập ngày sinh"></Column>
                             <Column field="action" header="Thao tác" body={actionBodyTemplate} headerStyle={{ width: '15em', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} filterElement={actionFilterElement} filter filterMatchMode="custom" />
