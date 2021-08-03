@@ -154,10 +154,6 @@ const ReportDetail = (props) => {
                             isLoadingDelete &&
                             <button type="button" className="btn button-delete mr-4" disabled="disabled"><i className="fa fa-spinner fa-spin mr-2" aria-hidden></i>Xử lí...</button>
                         }
-                        {
-                            !isLoadingDelete &&
-                            <button className="btn button-delete mr-4" onClick={deleteReport}>Xóa</button>
-                        }
                 </div>
             </div>
         </>
