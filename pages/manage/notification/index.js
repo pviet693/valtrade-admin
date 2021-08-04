@@ -50,17 +50,15 @@ const Notification = () => {
             console.log(res);
             if (res.status === 200) {
                 if (res.data.code === 200) {
-                    // let listNotification = [];
-                    // res.data.result.map(x => {
-                    //     let post = new PostModel();
-                    //     post.id = x._id || "";
-                    //     post.title = x.title || "";
-                    //     post.imageUrl = x.imageUrl.url || "";
-                    //     post.content = x.content || "";
-                    //     post.timeCreate = x.timeCreate ? Moment(x.timeCreate).format("DD/MM/yyyy") : "";
-                    //     listPosts.push(post);
-                    // })
-                    // setPosts(listPosts);
+                    let listNotification = [];
+                    res.data.result.map(x => {
+                        let notification = {};
+                        notification.id = x._id || "";
+                        notification.content = x.content || "";
+                        notification.timeCreate = x.time ? Moment(x.time).format("DD/MM/yyyy") : "";
+                        listNotification.push(notification);
+                    })
+                    setNotifications(listNotification);
                 } else {
                     let message = res.data.message || "Có lỗi xảy ra vui lòng thử lại sau.";
                     common.Toast(message, 'error');
@@ -92,7 +90,7 @@ const Notification = () => {
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             scrollable scrollHeight="100%"
                         >
-                            <Column field="content" header="Tiêu đề bài đăng" sortable filter filterPlaceholder="Nhập tiêu đề" bodyStyle={{fontWeight: '500'}}></Column>
+                            <Column field="content" header="Nội dung bài đăng" sortable filter bodyStyle={{fontWeight: '500'}}></Column>
                             <Column field="timeCreate" header="Ngày đăng" sortable filter filterPlaceholder="dd/mm/yyyy" headerStyle={{ width: '12em', textAlign: 'center' }}></Column>
                             <Column field="action" header="Thao tác" body={actionBodyTemplate} headerStyle={{ width: '15em', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} filterElement={actionFilterElement} filter filterMatchMode="custom" />
                         </DataTable>
