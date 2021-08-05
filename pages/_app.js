@@ -27,8 +27,11 @@ import '../styles/brand/brand-detail.scss';
 import '../styles/post/post-detail.scss';
 import '../styles/notification/notification-detail.scss';
 import '../styles/status-filter.scss';
+import '../styles/badge.scss';
+import '../styles/status-card.scss';
+import '../styles/table.scss';
+import '../styles/home.scss';
 import dynamic from 'next/dynamic';
-import Head from 'next/head';
 import { DataProvider } from '../store/GlobalState';
 import Router from 'next/router';
 import NProgress from 'nprogress'; //nprogress module
