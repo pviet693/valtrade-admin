@@ -31,6 +31,7 @@ import '../styles/badge.scss';
 import '../styles/status-card.scss';
 import '../styles/table.scss';
 import '../styles/home.scss';
+// import '../styles/boxicons.min.css';
 import dynamic from 'next/dynamic';
 import { DataProvider } from '../store/GlobalState';
 import Router from 'next/router';
