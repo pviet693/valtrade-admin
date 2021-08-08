@@ -285,16 +285,6 @@ const api = {
             return axios.post(url.adminPost.createPost(), body, newConfig);
         },
         deletePost: (id) => {
-            // return axios.delete(url.adminPost.deletePost(), {
-            //     headers: {
-            //         Authorization: `Bearer ${token}`,
-            //         'Content-Type': 'application/json',
-            //         'Access-Control-Allow-Origin': '*'
-            //     },
-            //     data: {
-            //         id: id
-            //     }
-            // });
             if (isEnable())
                 return axios.delete(url.adminPost.deletePost(), {
                     headers: {
@@ -328,6 +318,13 @@ const api = {
         },
         detailReport: (id) => {
             return axios.get(url.adminReport.detailReport().replace(":id",id), config);
+        }
+    },
+    dashboard: {
+        getDashboard: (token = '') => {
+            if (isEnable(token)) {
+                return axios.get(url.dashboard.getDashboard(), config);
+            }
         }
     }
 };

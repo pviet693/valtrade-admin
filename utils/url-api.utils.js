@@ -78,6 +78,9 @@ const url = {
     adminReport: {
         getListReport: () => `${baseUrl}/api/report/getListReport`,
         detailReport: () => `${baseUrl}/api/report/detail/:id`,
+    },
+    dashboard: {
+        getDashboard: () => `${baseUrl}/api/admin/dashboard`
     }
 }
 

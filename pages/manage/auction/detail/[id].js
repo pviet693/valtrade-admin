@@ -588,7 +588,7 @@ export async function getServerSideProps(ctx) {
                     }
                 }
             } catch (err) {
-                console.log(err.message);
+                console.log(err);
             }
         }
         else {
