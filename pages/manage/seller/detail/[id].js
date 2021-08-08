@@ -25,7 +25,7 @@ const SellerDetail = (props) => {
         router.push('/manage/seller');
     }
 
-    useEffect(async () => {
+    const getDataSeller = async () => {
         try {
             const res = await api.adminSeller.getDetail(id);
             if (res.status === 200) {
@@ -39,12 +39,17 @@ const SellerDetail = (props) => {
                     sellerDetail.shop_name = res.data.result.nameShop || "";
                     sellerDetail.accept = res.data.result.accept || "";
                     sellerDetail.Identified = res.data.result.arrayImage.map(x => x.url);
+                    sellerDetail.active = res.data.result.active || "";
                     setSeller(sellerDetail);
                 }
             }
         } catch(error) {
             common.Toast(error, 'error');
         }
+    }
+
+    useEffect(() => {
+        getDataSeller();
     }, [])
 
     const acceptSeller = () => {
@@ -59,9 +64,8 @@ const SellerDetail = (props) => {
                         refLoadingBar.current.complete();
                         if (res.status === 200) {
                             if (res.data.code === 200) {
-                                common.Toast('Phê duyệt người bán thành công.', 'success');    
+                                common.Toast('Phê duyệt người bán thành công.', 'success').then(() => getDataSeller());;    
                             }
-                            router.push(`/manage/seller/detail/${id}`);
                         }
                     } catch(error) {
                         setIsLoadingAccept(false);
@@ -74,6 +78,53 @@ const SellerDetail = (props) => {
 
     const rejectSeller = () => {
         
+    }
+
+    const lockSeller = () => {
+        common.ConfirmDialog('Xác nhận', 'Bạn muốn vô hiệu hóa người bán này?', "Đồng ý")
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const res = await api.adminSeller.lockSeller(id);
+
+                        if (res.status === 200){
+                            if (res.data.code === 200){
+                                common.Toast('Thành công.', 'success')
+                                    .then(() => getDataSeller());
+                            } else {
+                                const message = res.data.message || 'Thất bại.';
+                                common.Toast(message, 'error');
+                            }
+                        }
+                    }catch(error) {
+                        refLoadingBar.current.complete();
+                        common.Toast(error, 'error');
+                    }
+                }
+            });
+    }
+
+    const unlockSeller = () => {
+        common.ConfirmDialog('Xác nhận', 'Bạn muốn mở khóa người bán này?', "Đồng ý")
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const res = await api.adminSeller.unlockSeller(id);
+                        if (res.status === 200){
+                            if (res.data.code === 200){
+                                common.Toast('Thành công.', 'success')
+                                    .then(() => getDataSeller());
+                            } else {
+                                const message = res.data.message || 'Thất bại.';
+                                common.Toast(message, 'error');
+                            }
+                        }
+                    }catch(error) {
+                        refLoadingBar.current.complete();
+                        common.Toast(error, 'error');
+                    }
+                }
+            });
     }
 
     return (
@@ -160,6 +211,11 @@ const SellerDetail = (props) => {
                         seller.accept ? (
                             <div>
                                 <Button className="btn btn-accepted disabled">Đã phê duyệt</Button>
+                                {
+                                    seller.active ? 
+                                    <Button className="btn btn-lock" onClick={lockSeller}>Vô hiệu tài khoản</Button>
+                                    : <Button className="btn btn-unlock" onClick={unlockSeller}>Mở khóa tài khoản</Button>
+                                }
                             </div>
                         ) : (
                             <div>

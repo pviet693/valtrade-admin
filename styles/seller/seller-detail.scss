@@ -120,5 +120,26 @@
             box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
             margin-right: 20px;
         }
+
+        .btn-lock{
+            background-color: #de3535;
+            color: #fff;
+            width: 150px !important;
+            height: 40px;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
+            margin-left: 20px;
+            border-radius: 10px !important;
+            
+        }
+
+        .btn-unlock{
+            background-color: #0795df;
+            color: #fff;
+            width: 150px !important;
+            height: 40px;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
+            margin-left: 20px;
+            border-radius: 10px !important;
+        }
     }
 }

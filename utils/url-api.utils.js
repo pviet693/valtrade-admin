@@ -28,6 +28,8 @@ const url = {
         getDetail: () => `${baseUrl}/api/seller/detail/`,
         postAccept: () => `${baseUrl}/api/seller/accept`,
         deleteSeller: () => `${baseUrl}/api/seller/delete/`,
+        lockSeller: () => `${baseUrl}/api/seller/lockSeller`,
+        unlockSeller: () => `${baseUrl}/api/seller/unlock`,
     },
     adminProduct: {
         getList: () => `${baseUrl}/api/product/get`,

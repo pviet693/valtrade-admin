@@ -117,6 +117,12 @@ const api = {
         },
         delete: (id) => {
             return axios.delete(url.adminSeller.deleteSeller().concat(id), config);
+        },
+        lockSeller: (id) => {
+            return axios.put(url.adminSeller.lockSeller(), {id:id}, config);
+        },
+        unlockSeller: (id) => {
+            return axios.put(url.adminSeller.unlockSeller(), {id:id}, config);
         }
     },
     adminProduct: {

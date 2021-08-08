@@ -22,5 +22,6 @@ export class SellerDetailModel {
         this.shop_name = "";
         this.accept = "";        
         this.Identified = [];
+        this.active = "";
     }
 }
